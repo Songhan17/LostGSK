@@ -1,18 +1,20 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SkillController : MonoBehaviour
 {
 
-    private List<Skill> skillList;
+    private Dictionary<int, Skill> skillDict;
 
     // 获取技能列表
     public List<Skill> GetList(Skill.SkillType type)
     {
+
         List<Skill> skills = new List<Skill>();
-        skillList.ForEach(e =>
+        skillDict.Values.ToList().ForEach(e =>
         {
             if (e.Type == type)
             {
@@ -25,7 +27,18 @@ public class SkillController : MonoBehaviour
     // 获得技能
     public void GetSkill(int id)
     {
-        skillList.Add(SkillManager.Instance.GetSkillById(id));
+        Skill skill = skillDict[id];
+        if (skill != null)
+        {
+            skill.Amount++;
+            skillDict.Remove(id);
+            skillDict.Add(skill.Id, skill);
+        }
+        else
+        {
+            skill = SkillManager.Instance.GetSkillById(id);
+            skillDict.Add(skill.Id, skill);
+        }
     }
 
     // 初始化加载技能
@@ -33,6 +46,7 @@ public class SkillController : MonoBehaviour
     {
         // 读取配置文件
         SkillManager.Instance.GetSkills();
+        SkillManager.Instance.GetDict();
     }
 
     public void EquipSkill(int id)

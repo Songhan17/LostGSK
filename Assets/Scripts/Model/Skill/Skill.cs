@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class Skill
 {
-    public int ID { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public SkillType Type { get; set; }
     public int Amount { get; set; }
@@ -25,12 +25,12 @@ public class Skill
 
     public string Description { get; set; }
 
-    public Skill() { ID = -1; }
+    public Skill() { Id = -1; }
 
-    public Skill(int iD, string name, SkillType type, int amount, float consume,
+    public Skill(int id, string name, SkillType type, int amount, float consume,
         float damage, float def, string des)
     {
-        ID = iD;
+        Id = id;
         Name = name;
         Type = type;
         Amount = amount;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 使每个UI成为单例，通过绑定或添加，UIManager负责更新UI

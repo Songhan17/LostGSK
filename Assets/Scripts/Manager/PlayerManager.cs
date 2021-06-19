@@ -1,30 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoSingleton<PlayerManager>
 {
-    #region 单例模式
-    private static PlayerManager _instance;
 
-    public static PlayerManager Instance
+    private Dictionary<int, Player> playerDict;
+
+    void Awake()
     {
-        get
+        ParsePlayerJson();
+    }
+
+    /// <summary>
+    /// 解析技能信息
+    /// </summary>
+    public void ParsePlayerJson()
+    {
+        playerDict = new Dictionary<int, Player>();
+        //文本为在Unity里面是 TextAsset类型
+        TextAsset playerText = Resources.Load<TextAsset>("Data/Player/Player");
+        string playerJson = playerText.text;//物品信息的Json格式
+        JSONObject j = new JSONObject(playerJson);
+        foreach (JSONObject temp in j.list)
         {
-            if (_instance == null)
-            {
-                //下面的代码只会执行一次
-                _instance = GameObject.Find("GameManager").GetComponent<PlayerManager>();
-            }
-            return _instance;
+            //下面的事解析这个对象里面的公有属性
+            int id = (int)(temp["id"].n);
+            float hp = (temp["hp"].n);
+            float mp = (temp["mp"].n);
+            float atk = (temp["atk"].n);
+            float def = (temp["def"].n);
+            float spe = (temp["spe"].n);
+            float lck = (temp["lck"].n);
+            float restore = (temp["restore"].n);
+            Player player = new Player(id, hp, mp, atk, def, spe, lck, restore);
+
+            playerDict.Add(player.Id, player);
         }
     }
-    #endregion
 
-    // 加载数据
-    public void initData()
+    // 获取人物信息by id
+    public Player GetSkillById(int id)
     {
+        if (playerDict != null)
+        {
+            return playerDict[id];
+        }
+        return null;
+    }
 
+    // 获取所有信息
+    public List<Player> GetSkills()
+    {
+        return playerDict.Values.ToList();
     }
 
 }

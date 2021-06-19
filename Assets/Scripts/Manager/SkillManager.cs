@@ -3,22 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class SkillManager : MonoBehaviour
+public class SkillManager : MonoSingleton<SkillManager>
 {
-    #region 单例模式
-    private static SkillManager _instance;
-
-    public static SkillManager Instance {
-        get {
-            if (_instance == null)
-            {
-                //下面的代码只会执行一次
-                _instance = GameObject.Find("GameManager").GetComponent<SkillManager>();
-            }
-            return _instance;
-        }
-    }
-    #endregion
 
     /// <summary>
     ///  技能信息的列表（集合）
@@ -38,7 +24,7 @@ public class SkillManager : MonoBehaviour
     {
         skillDict = new Dictionary<int, Skill>();
         //文本为在Unity里面是 TextAsset类型
-        TextAsset skillText = Resources.Load<TextAsset>("SkillJson/skills");
+        TextAsset skillText = Resources.Load<TextAsset>("Data/Enemy/Enemy");
         string skillsJson = skillText.text;//物品信息的Json格式
         JSONObject j = new JSONObject(skillsJson);
         foreach (JSONObject temp in j.list)
@@ -89,7 +75,7 @@ public class SkillManager : MonoBehaviour
                     skill = new WhiteSkill();
                     break;
             }
-            skillDict.Add(skill.ID, skill);
+            skillDict.Add(skill.Id, skill);
 
         }
     }
@@ -104,9 +90,14 @@ public class SkillManager : MonoBehaviour
         return null;
     }
 
+    // 获取所有信息
     public List<Skill> GetSkills()
     {
         return skillDict.Values.ToList();
     }
 
+    public Dictionary<int, Skill> GetDict()
+    {
+        return skillDict;
+    }
 }
