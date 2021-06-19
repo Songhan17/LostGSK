@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class SkillManager : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class SkillManager : MonoBehaviour
     void Awake()
     {
         ParseSkillJson();
-
+        
     }
 
     /// <summary>
@@ -101,6 +102,11 @@ public class SkillManager : MonoBehaviour
             return skillDict[id];
         }
         return null;
+    }
+
+    public List<Skill> GetSkills()
+    {
+        return skillDict.Values.ToList();
     }
 
 }

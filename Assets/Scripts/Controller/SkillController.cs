@@ -6,7 +6,7 @@ using UnityEngine;
 public class SkillController : MonoBehaviour
 {
 
-    private volatile List<Skill> skillList;
+    private List<Skill> skillList;
 
     // 获取技能列表
     public List<Skill> GetList(Skill.SkillType type)
@@ -28,6 +28,24 @@ public class SkillController : MonoBehaviour
         skillList.Add(SkillManager.Instance.GetSkillById(id));
     }
 
+    // 初始化加载技能
+    public void InitSkill()
+    {
+        // 读取配置文件
+        SkillManager.Instance.GetSkills();
+    }
 
+    public void EquipSkill(int id)
+    {
+        Skill skill = SkillManager.Instance.GetSkillById(id);
+        // 释放技能按键
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            //1 播放对应技能动画
+            // animatorController
+            //2 角色面板修改--减少mp
+        }
+        // 常规面板属性增减
+    }
 
 }
