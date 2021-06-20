@@ -65,8 +65,126 @@
         "reduceCon": 0,
         "addSpe": 0,
         "addLck": 0
+    },
+    {
+        "id": 6,
+        "name": "空中吉他6",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 7,
+        "name": "空中吉他7",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 8,
+        "name": "空中吉他8",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 9,
+        "name": "空中吉他9",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 10,
+        "name": "空中吉他10",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 11,
+        "name": "空中吉他11",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 12,
+        "name": "空中吉他12",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 13,
+        "name": "空中吉他13",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 14,
+        "name": "空中吉他14",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 15,
+        "name": "空中吉他15",
+        "type": "Red",
+        "amount": 1,
+        "consume": 20,
+        "damage": 50,
+        "defense": 0,
+        "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
     }
-
-
 
 ]

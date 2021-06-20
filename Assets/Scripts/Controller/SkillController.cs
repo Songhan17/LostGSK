@@ -7,12 +7,15 @@ using UnityEngine;
 public class SkillController : MonoBehaviour
 {
 
-    private Dictionary<int, Skill> skillDict;
+    private Dictionary<int, Skill> skillDict = new Dictionary<int, Skill>();
 
     // 获取技能列表
     public List<Skill> GetList(Skill.SkillType type)
     {
-
+        if (skillDict == null)
+        {
+            return null;
+        }
         List<Skill> skills = new List<Skill>();
         skillDict.Values.ToList().ForEach(e =>
         {
@@ -27,9 +30,10 @@ public class SkillController : MonoBehaviour
     // 获得技能
     public void GetSkill(int id)
     {
-        Skill skill = skillDict[id];
-        if (skill != null)
+        Skill skill;
+        if (skillDict.ContainsKey(id))
         {
+            skill = skillDict[id];
             skill.Amount++;
             skillDict.Remove(id);
             skillDict.Add(skill.Id, skill);

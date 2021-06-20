@@ -17,11 +17,13 @@ public class UIGameMenu : JuiSingleton<UIGameMenu>
 
         SpellCard = transform.Find("SpellCard");
 
-        Debug.Log("OnCreateOnCreateOnCreate");
         SpellCard.GetComponent<Button>().onClick.AddListener(() =>
         {
-            Debug.Log("点击");
-            UIGameSpellCard.Instance.Show();
+            UIGameSpellCard.Instance.Switch();
+            //if (!UIGameSpellCard.Instance.IsShow)
+            //{
+            //    UIGameSpellCardList.Instance.Hide();
+            //}
         });
 
     }
