@@ -1,2 +1,11 @@
 .meta
 *.meta
+/Library
+/Logs
+/ProjectSettings
+/obj
+/.vsconfig
+/Assembly-CSharp.csproj
+/Assembly-CSharp-Editor.csproj
+/LostGSK.sln
+/.vs

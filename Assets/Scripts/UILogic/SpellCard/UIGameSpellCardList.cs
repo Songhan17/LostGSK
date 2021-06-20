@@ -11,6 +11,7 @@ public class UIGameSpellCardList : JuiSingleton<UIGameSpellCardList>
     private Transform group;
     private List<Skill> skills;
     private ChildItem[] childItems;
+    private Transform lastTransform;
     private class ChildItem
     {
         public Transform item;
@@ -66,6 +67,13 @@ public class UIGameSpellCardList : JuiSingleton<UIGameSpellCardList>
                 childItems[i].item.gameObject.SetActive(false);
             }
         }
+        EventSystemManager.Instance.SetCurrentGameObject(group.GetChild(0).gameObject);
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+        EventSystemManager.Instance.SetCurrentGameObject(lastTransform.gameObject);
     }
 
     protected override void OnUpdate()
@@ -74,8 +82,9 @@ public class UIGameSpellCardList : JuiSingleton<UIGameSpellCardList>
 
     }
 
-    public void Refresh(Skill.SkillType type)
+    public void Refresh(Skill.SkillType type, Transform last)
     {
+        lastTransform = last;
         skills?.Clear();
         SkillController skillController = GameObject.Find("Player").GetComponent<SkillController>();
         skills = skillController.GetList(type);

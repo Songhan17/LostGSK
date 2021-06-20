@@ -18,7 +18,10 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            skillController.GetSkill(Random.Range(1,15));
+            for (int i = 0; i < 15; i++)
+            {
+                skillController.GetSkill(Random.Range(1, 15));
+            }
         }
     }
 }

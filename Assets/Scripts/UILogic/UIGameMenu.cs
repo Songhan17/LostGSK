@@ -7,14 +7,16 @@ public class UIGameMenu : JuiSingleton<UIGameMenu>
 {
     public override string uiPath => "MenuPanel";
 
-    private Transform SpellCard;
-    
+    public Transform PlayerPanel { get; private set; }
+    public Transform SpellCard { get; private set; }
+
 
 
     protected override void OnCreate()
     {
         base.OnCreate();
 
+        PlayerPanel = transform.Find("PlayerPanel");
         SpellCard = transform.Find("SpellCard");
 
         SpellCard.GetComponent<Button>().onClick.AddListener(() =>
@@ -25,6 +27,18 @@ public class UIGameMenu : JuiSingleton<UIGameMenu>
             //    UIGameSpellCardList.Instance.Hide();
             //}
         });
+    }
+
+    protected override void OnShow()
+    {
+        base.OnShow();
+        EventSystemManager.Instance.SetCurrentGameObject(PlayerPanel.gameObject);
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
 
     }
+
 }
