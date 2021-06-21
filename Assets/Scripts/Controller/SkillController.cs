@@ -66,4 +66,10 @@ public class SkillController : MonoBehaviour
         // 常规面板属性增减
     }
 
+    public void UpdateSkillDict(List<Skill> skills)
+    {
+        skillDict.Clear();
+        skillDict = skills.ToDictionary(item => item.Id, item => item);
+    }
+
 }

@@ -65,7 +65,13 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        CancelIfInParent(transform.gameObject);
+        if (IsFocus)
+        {
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                Hide();
+            }
+        }
     }
 
     public void EquipCard(Skill skill)
@@ -88,6 +94,11 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
             case Skill.SkillType.White: return White;
             default: return null;
         }
+    }
+
+    public string CurrentSkill(Skill skill)
+    {
+        return SkillofButton(skill).Find("Text").GetComponent<Text>().text;
     }
 
 }

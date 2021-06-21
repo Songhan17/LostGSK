@@ -49,6 +49,12 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        CancelIfInParent(transform.gameObject);
+        if (IsFocus)
+        {
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                Hide();
+            }
+        }
     }
 }
