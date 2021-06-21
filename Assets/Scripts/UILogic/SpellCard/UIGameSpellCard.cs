@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIGameSpellCard : JuiSingleton<UIGameSpellCard>
+public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
 {
     public override string uiPath => "MenuPanel/SpellCard/Card";
 
@@ -42,6 +42,12 @@ public class UIGameSpellCard : JuiSingleton<UIGameSpellCard>
             UIGameSpellCardList.Instance.Refresh(Skill.SkillType.White, White);
             UIGameSpellCardList.Instance.Switch();
         });
+
+        transform.AddListener(UnityEngine.EventSystems.EventTriggerType.Cancel, _e =>
+        {
+            Hide();
+        });
+
     }
 
     public override void Show()
@@ -56,25 +62,31 @@ public class UIGameSpellCard : JuiSingleton<UIGameSpellCard>
         EventSystemManager.Instance.SetCurrentGameObject(UIGameMenu.Instance.SpellCard.gameObject);
     }
 
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+        CancelIfInParent(transform.gameObject);
+    }
 
     public void EquipCard(Skill skill)
     {
+        SkillofButton(skill).Find("Text").GetComponent<Text>().text = skill.Name;
+    }
+
+    public void Unstall(Skill skill)
+    {
+        SkillofButton(skill).Find("Text").GetComponent<Text>().text = string.Empty;
+    }
+
+    private Transform SkillofButton(Skill skill)
+    {
         switch (skill.Type)
         {
-            case Skill.SkillType.Red: 
-                Red.Find("Text").GetComponent<Text>().text = skill.Name;
-                break;
-            case Skill.SkillType.Blue:
-                Blue.Find("Text").GetComponent<Text>().text = skill.Name;
-                break;
-            case Skill.SkillType.Yellow:
-                Yellow.Find("Text").GetComponent<Text>().text = skill.Name;
-                break;
-            case Skill.SkillType.White:
-                White.Find("Text").GetComponent<Text>().text = skill.Name;
-                break;
-            default:
-                break;
+            case Skill.SkillType.Red: return Red;
+            case Skill.SkillType.Blue: return Blue;
+            case Skill.SkillType.Yellow: return Yellow;
+            case Skill.SkillType.White: return White;
+            default: return null;
         }
     }
 

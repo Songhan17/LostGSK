@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
         UIGameMenu.Instance.Show();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.G))

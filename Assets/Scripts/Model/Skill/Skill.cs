@@ -25,10 +25,15 @@ public class Skill
 
     public string Description { get; set; }
 
+    /// <summary>
+    /// 是否装备，标志位
+    /// </summary>
+    public bool IsEquip { get; set; }
+
     public Skill() { Id = -1; }
 
     public Skill(int id, string name, SkillType type, int amount, float consume,
-        float damage, float def, string des)
+        float damage, float def, string des, bool isEquip)
     {
         Id = id;
         Name = name;
@@ -38,6 +43,7 @@ public class Skill
         Damage = damage;
         Defense = def;
         Description = des;
+        IsEquip = isEquip;
     }
 
     /// <summary>

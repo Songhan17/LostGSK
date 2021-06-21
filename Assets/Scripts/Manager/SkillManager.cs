@@ -48,13 +48,13 @@ public class SkillManager : MonoSingleton<SkillManager>
                     // 红特有
                     float duration = (temp["duration"].n);
                     string animId = temp["animId"].str;
-                    skill = new RedSkill(id, name, type, amount, consume, damage, defense, description, duration, animId);
+                    skill = new RedSkill(id, name, type, amount, consume, damage, defense, description,false, duration, animId);
                     break;
                 case Skill.SkillType.Blue:
                     // 蓝特有
                     animId = temp["animId"].str;
                     float restore = temp["restore"].n;
-                    skill = new BlueSkill(id, name, type, amount, consume, damage, defense, description, animId, restore);
+                    skill = new BlueSkill(id, name, type, amount, consume, damage, defense, description,false, animId, restore);
                     break;
                 case Skill.SkillType.Yellow:
                     // 黄特有
@@ -67,7 +67,7 @@ public class SkillManager : MonoSingleton<SkillManager>
                     float reduceCon = temp["reduceCon"].n;
                     float addSpe = temp["addSpe"].n;
                     float addLck = temp["addLck"].n;
-                    skill = new YellowSkill(id, name, type, amount, consume, damage, defense, description, animId, restore, addHp,
+                    skill = new YellowSkill(id, name, type, amount, consume, damage, defense, description,false, animId, restore, addHp,
                        addMp, addAtk, addDef, reduceCon, addSpe, addLck);
                     break;
                 case Skill.SkillType.White:

@@ -11,8 +11,8 @@ public class BlueSkill : Skill
     public float Restore { get; set; }
 
     public BlueSkill(int id, string name, SkillType skillType, int amount, float consume,
-        float damage, float def, string des, string animId, float restore)
-        : base(id, name, skillType, amount, consume, damage, def, des)
+        float damage, float def, string des,bool isEquip, string animId, float restore)
+        : base(id, name, skillType, amount, consume, damage, def, des,isEquip)
     {
         AnimId = animId;
         Restore = restore;

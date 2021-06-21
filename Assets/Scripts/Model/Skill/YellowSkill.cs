@@ -15,9 +15,9 @@ public class YellowSkill : Skill
     public float AddLck { get; set; }
 
     public YellowSkill(int id, string name, SkillType skillType, int amount, float consume,
-        float damage, float defense, string des, string animId, float restore, float addHp, float addMp, float addAtk,
+        float damage, float defense, string des, bool isEquip, string animId, float restore, float addHp, float addMp, float addAtk,
         float addDef, float reduceCon, float addSpe, float addLck)
-        : base(id, name, skillType, amount, consume, damage, defense, des)
+        : base(id, name, skillType, amount, consume, damage, defense, des,isEquip)
     {
         AnimId = animId;
         Restore = restore;
