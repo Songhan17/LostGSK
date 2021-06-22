@@ -68,8 +68,14 @@ public class SkillController : MonoBehaviour
 
     public void UpdateSkillDict(List<Skill> skills)
     {
-        skillDict.Clear();
-        skillDict = skills.ToDictionary(item => item.Id, item => item);
+        skills.ForEach(s =>
+        {
+            skillDict[s.Id] = s;
+        });
+
+        // TODO 写入json
+        //skillDict.Clear();
+        //skillDict = skills.ToDictionary(item => item.Id, item => item);
     }
 
 }

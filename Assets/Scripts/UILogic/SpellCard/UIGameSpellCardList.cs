@@ -9,13 +9,16 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
 {
     public override string uiPath => "MenuPanel/SpellCard/CardList";
 
+    private SkillController skillController;
     private int maxItemCount;
     private Transform group;
     private List<Skill> skills;
     private ChildItem[] childItems;
     private Transform lastTransform;
     private Transform endChild;
-    private int? index;
+    // 上一次已装备的位置
+    private int? LastIndex;
+    private Slider slider;
     private class ChildItem
     {
         public Transform item;
@@ -23,19 +26,17 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         public Text text;
     }
 
-    public int LastStartIndex {
+    // 最大索引
+    public int MaxStartIndex {
         get => Math.Max(skills.Count - maxItemCount, 0);
     }
+    // 滑动索引
     private int startIndex;
     public int StartIndex {
         get => startIndex;
         set {
-            value = Math.Max(Math.Min(value, LastStartIndex), 0);
+            value = Math.Max(Math.Min(value, MaxStartIndex), 0);
             startIndex = value;
-            //if (this.LastStartIndex != 0 && !isDragingScroll) //防止除数为0，滚动条没在手动调整
-            //{
-            //    this.scrollbar.value = (float)value / (float)this.LastStartIndex;
-            //}
 
             for (int i = 0; i < maxItemCount; i++)
             {
@@ -60,6 +61,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         }
     }
 
+    // 当前导航索引
     public int? CurrentIndex {
         get => GetIndexByName(EventSystemManager.Instance.GetCurrent().GetComponentInChildren<Text>().text);
     }
@@ -68,6 +70,8 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
     {
         base.OnCreate();
         group = transform.Find("List");
+        slider = transform.Find("Slider").GetComponent<Slider>();
+        skillController = GameObject.Find("Player").GetComponent<SkillController>();
         maxItemCount = group.childCount;
         childItems = new ChildItem[maxItemCount];
         for (int i = 0; i < maxItemCount; i++)
@@ -97,7 +101,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
             });
 
         }
-        // 0位监听
+        #region 0位监听
         group.GetChild(0).AddListener(EventTriggerType.Move, e =>
          {
              if (Input.GetKeyDown(KeyCode.W))
@@ -106,7 +110,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
                  if (CurrentIndex == 0)
                  {
                      EventSystemManager.Instance.SetCurrentGameObject(endChild.gameObject);
-                     StartIndex = LastStartIndex;
+                     StartIndex = MaxStartIndex;
                  }
                  else
                  {
@@ -114,29 +118,39 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
                  }
              }
          });
+        #endregion
     }
 
 
 
     protected override void OnShow()
     {
-        if (skills == null || skills.Capacity == 0)
+        if (skills == null || skills.Count == 0)
         {
-            Hide();
+            base.Hide();
             return;
         }
         base.OnShow();
-
-        if (index != -1)
+        slider.maxValue = skills.Count-1;
+        if (skills.Count <= maxItemCount)
         {
-            StartIndex = Math.Max(index.Value - (maxItemCount - 1), 0);
+            slider.gameObject.SetActive(false);
+        }
+        else
+        {
+            slider.gameObject.SetActive(true);
+        }
+        #region 记录上一次路径
+        if (LastIndex != -1)
+        {
+            StartIndex = Math.Max(LastIndex.Value - (maxItemCount - 1), 0);
             if (StartIndex > 0)
             {
                 EventSystemManager.Instance.SetCurrentGameObject(group.GetChild(maxItemCount - 1).gameObject);
             }
             else
             {
-                EventSystemManager.Instance.SetCurrentGameObject(group.GetChild(index.Value).gameObject);
+                EventSystemManager.Instance.SetCurrentGameObject(group.GetChild(LastIndex.Value).gameObject);
             }
         }
         else
@@ -145,17 +159,17 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
             EventSystemManager.Instance.SetCurrentGameObject(group.GetChild(0).gameObject);
             Debug.Log(EventSystemManager.Instance.GetCurrent());
         }
-
+        #endregion
         endChild = group.GetChild(group.GetChildActive() - 1);
 
-        // 返回最上级监听
+        #region 返回最上级监听
         if (!endChild.name.Equals(group.GetChild(0).name))
         {
             endChild.AddListener(EventTriggerType.Move, e =>
          {
              if (Input.GetKeyDown(KeyCode.S))
              {
-                 if (LastStartIndex <= 0)
+                 if (MaxStartIndex <= 0)
                  {
                      if (EventSystemManager.Instance.GetCurrent() == endChild.gameObject)
                      {
@@ -164,7 +178,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
                  }
                  else
                  {
-                     if (startIndex == LastStartIndex)
+                     if (startIndex == MaxStartIndex)
                      {
                          StartIndex = 0;
                          EventSystemManager.Instance.SetCurrentGameObject(group.GetChild(0).gameObject);
@@ -177,6 +191,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
              }
          });
         }
+        #endregion
     }
 
     public override void Hide()
@@ -210,18 +225,19 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
                 Hide();
             }
         }
+        slider.value = (float)CurrentIndex;
     }
 
+    // 刷新UI
     public void Refresh(Skill.SkillType type, Transform last, string text)
     {
         lastTransform = last;
         skills?.Clear();
-        SkillController skillController = GameObject.Find("Player").GetComponent<SkillController>();
         skills = skillController.GetList(type);
-        index = GetIndexByName(text);
-        
+        LastIndex = GetIndexByName(text);
     }
 
+    // 更新技能，保存数据
     public void UpdateSkill(Skill skill, bool isEquip)
     {
         skills.ForEach(i =>
@@ -237,6 +253,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         });
     }
 
+    // 见名知意
     public int? GetIndexByName(string name)
     {
         return skills?.FindIndex(item =>

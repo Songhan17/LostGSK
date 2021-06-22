@@ -74,16 +74,18 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         }
     }
 
+    // 更新符卡名
     public void EquipCard(Skill skill)
     {
         SkillofButton(skill).Find("Text").GetComponent<Text>().text = skill.Name;
     }
-
+    // 卸载符卡
     public void Unstall(Skill skill)
     {
         SkillofButton(skill).Find("Text").GetComponent<Text>().text = string.Empty;
     }
 
+    // 根据技能返回组件类型
     private Transform SkillofButton(Skill skill)
     {
         switch (skill.Type)
@@ -96,11 +98,13 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         }
     }
 
+    // 根据技能获取当前已装备技能名
     public string CurrentSkill(Skill skill)
     {
         return SkillofButton(skill).Find("Text").GetComponent<Text>().text;
     }
 
+    // 根据组件获取text
     public string GetCurrentName(Transform transform)
     {
         return transform.Find("Text").GetComponent<Text>().text;
