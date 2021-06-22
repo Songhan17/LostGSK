@@ -24,22 +24,22 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
 
         Red.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Red, Red);
+            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Red, Red, GetCurrentName(Red));
             UIGameSpellCardList.Instance.Switch();
         });
         Blue.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Blue,Blue);
+            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Blue,Blue, GetCurrentName(Blue));
             UIGameSpellCardList.Instance.Switch();
         });
         Yellow.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Yellow,Yellow);
+            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Yellow,Yellow, GetCurrentName(Yellow));
             UIGameSpellCardList.Instance.Switch();
         });
         White.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.White, White);
+            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.White, White, GetCurrentName(White));
             UIGameSpellCardList.Instance.Switch();
         });
 
@@ -101,4 +101,8 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         return SkillofButton(skill).Find("Text").GetComponent<Text>().text;
     }
 
+    public string GetCurrentName(Transform transform)
+    {
+        return transform.Find("Text").GetComponent<Text>().text;
+    }
 }

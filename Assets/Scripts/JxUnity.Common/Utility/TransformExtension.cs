@@ -149,6 +149,25 @@ public static class TransformExtension
         go.transform.SetParent(_this);
         return go.transform;
     }
+
+    /// <summary>
+    /// 查找子物体，不包括孙物体，隐藏的子物体
+    /// </summary>
+    /// <param name="_this"></param>
+    /// <returns></returns>
+    public static int GetChildActive(this Transform _this)
+    {
+        int count = 0;
+        for (int i = 0; i < _this.childCount; i++)
+        {
+            if (_this.GetChild(i).gameObject.activeInHierarchy)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
 }
 
 public static class VertexHelperExtension

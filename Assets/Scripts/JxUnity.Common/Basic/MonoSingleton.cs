@@ -24,7 +24,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
                 GameObject go = new GameObject(typeof(T).Name);
                 mInstance = go.AddComponent<T>();
 #if UNITY_EDITOR
-                Debug.LogWarning("New Singleton Object " + typeof(T));
+                //Debug.LogWarning("New Singleton Object " + typeof(T));
 #endif
                 GameObject parent = GameObject.Find("__System");
                 if (parent == null)
