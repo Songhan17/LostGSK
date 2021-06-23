@@ -14,7 +14,6 @@ public class SkillManager : MonoSingleton<SkillManager>
     void Awake()
     {
         ParseSkillJson();
-        
     }
 
     /// <summary>

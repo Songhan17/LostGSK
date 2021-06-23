@@ -23,10 +23,6 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
         SpellCard.GetComponent<Button>().onClick.AddListener(() =>
         {
             UIGameSpellCard.Instance.Switch();
-            //if (!UIGameSpellCard.Instance.IsShow)
-            //{
-            //    UIGameSpellCardList.Instance.Hide();
-            //}
         });
 
         
@@ -44,6 +40,7 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
     {
         base.Hide();
         EventSystemManager.Instance.lastGameObject = null;
+        SkillController.Instance.Save();
     }
 
     protected override void OnUpdate()

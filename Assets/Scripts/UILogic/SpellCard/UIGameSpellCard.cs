@@ -11,7 +11,7 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
     private Transform Blue;
     private Transform Yellow;
     private Transform White;
-    public List<Skill> skills;
+    private List<Skill> skills;
 
     protected override void OnCreate()
     {
@@ -52,14 +52,13 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
             Hide();
         });
 
-        InitUI();
-
     }
 
     public override void Show()
     {
         base.Show();
         EventSystemManager.Instance.SetCurrentGameObject(Red.gameObject);
+        InitUI();
     }
 
     public override void Hide()
@@ -122,12 +121,40 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
     // 初始化加载
     public void InitUI()
     {
-       List<Skill> skills = SkillController.Instance.GetSkills();
+        skills = SkillController.Instance.GetSkills();
         skills?.ForEach(s =>
         {
             if (s.IsEquip)
             {
                 Refresh(s, true);
+            }
+        });
+    }
+
+    public List<Skill> GetList(Skill.SkillType type)
+    {
+        List<Skill> skillsOfType = new List<Skill>();
+        skills?.ForEach(s =>
+        {
+            if (s.Type == type)
+            {
+                skillsOfType.Add(s);
+            }
+        });
+        return skillsOfType;
+    }
+
+    public void UpdateSkill(int id)
+    {
+        skills?.ForEach(s =>
+        {
+            if (s.Id == id)
+            {
+                s.IsEquip = true;
+            }
+            else
+            {
+                s.IsEquip = false;
             }
         });
     }

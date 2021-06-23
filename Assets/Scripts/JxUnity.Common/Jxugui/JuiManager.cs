@@ -37,6 +37,7 @@ public class JuiManager : MonoSingleton<JuiManager>
 
     public void Pop(Type type)
     {
+        Debug.Log(uiShowStack.Count);
         this.uiShowStack.Remove(type);
     }
 

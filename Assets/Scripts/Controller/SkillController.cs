@@ -39,7 +39,7 @@ public class SkillController : MonoSingleton<SkillController>
     }
 
     // 获得技能
-    public void GetSkill(int id)
+    public void GetSkill(int id,bool isEquip)
     {
         Skill skill;
         if (skillDict.ContainsKey(id))
@@ -51,6 +51,10 @@ public class SkillController : MonoSingleton<SkillController>
         else
         {
             skill = SkillManager.Instance.GetSkillById(id);
+            if (isEquip)
+            {
+                skill.IsEquip = true;
+            }
             skillDict.Add(skill.Id, skill);
         }
     }
@@ -82,30 +86,47 @@ public class SkillController : MonoSingleton<SkillController>
         {
             skillDict[s.Id] = s;
         });
-
-        // TODO 写入json
-        Save();
-        //skillDict.Clear();
-        //skillDict = skills.ToDictionary(item => item.Id, item => item);
     }
 
-    private void Save()
+    public void Save()
     {
-        Debug.Log(skillDict.Count);
-        string skllsJson = JsonConvert.SerializeObject(skillDict);
-        PlayerPrefs.SetString("Player_Skill", skllsJson);
+        if (skillDict.Count == 0)
+        {
+            return;
+        }
+        string skillData = "";
+
+        skillDict.Values.ToList().ForEach(sk =>
+        {
+            skillData +=  ((sk.IsEquip ? -1 : 1) * sk.Id).ToString() + "A";
+        });
+        PlayerPrefs.SetString("Player_Skill", skillData.TrimEnd('A'));
     }
 
     public void Load()
     {
         if (PlayerPrefs.HasKey("Player_Skill") == false) return;
         string skillsData = PlayerPrefs.GetString("Player_Skill");
-        Debug.Log(skillsData);
-        skillDict = (Dictionary<int, Skill>)JsonConvert.DeserializeObject(skillsData);
-        skillDict.Values.ToList().ForEach(e =>
+        //Debug.Log(skillsData);
+        if (skillsData == null)
         {
-            Debug.Log(e.Name);
+            return;
+        }
+        List<string> list = new List<string>(skillsData.Split('A'));
+
+        list.ForEach(e =>
+        {
+            //Debug.Log(e);
+            if (int.Parse(e) < 0)
+            {
+                GetSkill(-int.Parse(e), true);
+            }
+            else
+            {
+                GetSkill(int.Parse(e), false);
+            }
         });
+
     }
 
 }
