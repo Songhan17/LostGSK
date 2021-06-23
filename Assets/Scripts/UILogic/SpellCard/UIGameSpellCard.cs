@@ -11,6 +11,7 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
     private Transform Blue;
     private Transform Yellow;
     private Transform White;
+    public List<Skill> skills;
 
     protected override void OnCreate()
     {
@@ -20,7 +21,10 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         Yellow = transform.Find("Yellow");
         White = transform.Find("White");
 
-        // TODO event trigger
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).GetComponentInChildren<Text>().text = string.Empty;
+        }
 
         Red.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -48,6 +52,8 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
             Hide();
         });
 
+        InitUI();
+
     }
 
     public override void Show()
@@ -60,6 +66,7 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
     {
         base.Hide();
         EventSystemManager.Instance.SetCurrentGameObject(UIGameMenu.Instance.SpellCard.gameObject);
+        SkillController.Instance.UpdateSkillDict(skills);
     }
 
     protected override void OnUpdate()
@@ -74,15 +81,17 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         }
     }
 
-    // 更新符卡名
-    public void EquipCard(Skill skill)
+    // 更新UI
+    public void Refresh(Skill skill, bool equip)
     {
-        SkillofButton(skill).Find("Text").GetComponent<Text>().text = skill.Name;
-    }
-    // 卸载符卡
-    public void Unstall(Skill skill)
-    {
-        SkillofButton(skill).Find("Text").GetComponent<Text>().text = string.Empty;
+        if (equip)
+        {
+            SkillofButton(skill).Find("Text").GetComponent<Text>().text = skill.Name;
+        }
+        else
+        {
+            SkillofButton(skill).Find("Text").GetComponent<Text>().text = string.Empty;
+        }
     }
 
     // 根据技能返回组件类型
@@ -109,4 +118,18 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
     {
         return transform.Find("Text").GetComponent<Text>().text;
     }
+
+    // 初始化加载
+    public void InitUI()
+    {
+       List<Skill> skills = SkillController.Instance.GetSkills();
+        skills?.ForEach(s =>
+        {
+            if (s.IsEquip)
+            {
+                Refresh(s, true);
+            }
+        });
+    }
+
 }

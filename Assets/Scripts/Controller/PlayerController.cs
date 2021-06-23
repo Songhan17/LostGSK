@@ -5,11 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private SkillController skillController;
 
     void Start()
     {
-        skillController = GameObject.Find("Player").GetComponent<SkillController>();
         UIGameMenu.Instance.Show();
     }
 
@@ -19,7 +17,7 @@ public class PlayerController : MonoBehaviour
         {
             for (int i = 0; i < 15; i++)
             {
-                skillController.GetSkill(Random.Range(1, 15));
+                SkillController.Instance.GetSkill(Random.Range(1, 15));
             }
         }
     }

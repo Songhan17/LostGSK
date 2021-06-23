@@ -9,7 +9,6 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
 {
     public override string uiPath => "MenuPanel/SpellCard/CardList";
 
-    private SkillController skillController;
     private int maxItemCount;
     private Transform group;
     private List<Skill> skills;
@@ -71,7 +70,6 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         base.OnCreate();
         group = transform.Find("List");
         slider = transform.Find("Slider").GetComponent<Slider>();
-        skillController = GameObject.Find("Player").GetComponent<SkillController>();
         maxItemCount = group.childCount;
         childItems = new ChildItem[maxItemCount];
         for (int i = 0; i < maxItemCount; i++)
@@ -89,13 +87,13 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
                 if (!skill.IsEquip)
                 {
                     itemRoot.Find("Toggle").GetComponent<Toggle>().isOn = true;
-                    UIGameSpellCard.Instance.EquipCard(skill);
+                    UIGameSpellCard.Instance.Refresh(skill,true);
                     UpdateSkill(skill, true);
                 }
                 else
                 {
                     itemRoot.Find("Toggle").GetComponent<Toggle>().isOn = false;
-                    UIGameSpellCard.Instance.Unstall(skill);
+                    UIGameSpellCard.Instance.Refresh(skill,false);
                     UpdateSkill(skill, false);
                 }
             });
@@ -157,7 +155,6 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         {
             StartIndex = 0;
             EventSystemManager.Instance.SetCurrentGameObject(group.GetChild(0).gameObject);
-            Debug.Log(EventSystemManager.Instance.GetCurrent());
         }
         #endregion
         endChild = group.GetChild(group.GetChildActive() - 1);
@@ -213,6 +210,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         {
             endChild.RemoveAllListener(EventTriggerType.Move);
         }
+        UIGameSpellCard.Instance.skills = skills;
     }
 
     protected override void OnUpdate()
@@ -233,7 +231,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
     {
         lastTransform = last;
         skills?.Clear();
-        skills = skillController.GetList(type);
+        skills = SkillController.Instance.GetList(type);
         LastIndex = GetIndexByName(text);
     }
 
