@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : PlayerBase
 {
 
-
+    private void Awake()
+    {
+        playerData = PlayerManager.Instance.GetPlayerById(1);
+    }
     void Start()
     {
         UIGameMenu.Instance.Show();
@@ -31,4 +34,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public Player PlayerData()
+    {
+        return playerData;
+    }
+
 }

@@ -90,14 +90,12 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
                 {
                     itemRoot.Find("Toggle").GetComponent<Toggle>().isOn = true;
                     UIGameSpellCard.Instance.Refresh(skill,true);
-                    UpdateSkill(skill, true);
                     equipId = skill.Id;
                 }
                 else
                 {
                     itemRoot.Find("Toggle").GetComponent<Toggle>().isOn = false;
                     UIGameSpellCard.Instance.Refresh(skill,false);
-                    UpdateSkill(skill, false);
                     equipId = 0;
                 }
             });
@@ -127,13 +125,8 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
 
     protected override void OnShow()
     {
-        
         base.OnShow();
-        if (skills == null || skills.Count == 0)
-        {
-            base.Hide();
-            return;
-        }
+
         slider.maxValue = skills.Count-1;
         if (skills.Count <= maxItemCount)
         {
@@ -196,9 +189,10 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         #endregion
     }
 
-    public override void Hide()
+    protected override void OnHide()
     {
-        base.Hide();
+        base.OnHide();
+
         for (int i = 0; i < maxItemCount; i++)
         {
             if (i >= skills.Count)
@@ -215,7 +209,7 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         {
             endChild.RemoveAllListener(EventTriggerType.Move);
         }
-        UIGameSpellCard.Instance.UpdateSkill(equipId);
+        UIGameSpellCard.Instance.UpdateSkill(equipId,skills[0].Type);
     }
 
     protected override void OnUpdate()
@@ -238,6 +232,16 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
         skills?.Clear();
         skills = UIGameSpellCard.Instance.GetList(type);
         lastIndex = GetIndexByName(text);
+        skills?.ForEach(s => {
+            if (s.Name == text) equipId = s.Id;
+        });
+
+        if (skills == null || skills.Count == 0)
+        {
+            base.Hide();
+            return;
+        }
+        base.Show();
     }
 
     // 更新技能，保存数据
@@ -259,9 +263,6 @@ public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
     // 见名知意
     public int? GetIndexByName(string name)
     {
-        skills?.ForEach(s => {
-            if (s.Name == name) equipId = s.Id;
-        });
         return skills?.FindIndex(item =>
              item.Name.Equals(name));
     }

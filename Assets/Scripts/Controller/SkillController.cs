@@ -15,6 +15,16 @@ public class SkillController : MonoSingleton<SkillController>
         Load();
     }
 
+    // 获取技能信息by id
+    public Skill GetSkillById(int id)
+    {
+        if (skillDict != null)
+        {
+            return skillDict[id];
+        }
+        return null;
+    }
+
     // 获取技能列表
     public List<Skill> GetList(Skill.SkillType type)
     {
@@ -90,6 +100,7 @@ public class SkillController : MonoSingleton<SkillController>
 
     public void Save()
     {
+        Debug.Log("Save");
         if (skillDict.Count == 0)
         {
             return;
@@ -107,7 +118,8 @@ public class SkillController : MonoSingleton<SkillController>
     {
         if (PlayerPrefs.HasKey("Player_Skill") == false) return;
         string skillsData = PlayerPrefs.GetString("Player_Skill");
-        //Debug.Log(skillsData);
+        Debug.Log("Load");
+        Debug.Log(skillsData);
         if (skillsData == null)
         {
             return;

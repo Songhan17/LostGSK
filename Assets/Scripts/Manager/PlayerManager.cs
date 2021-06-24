@@ -14,7 +14,7 @@ public class PlayerManager : MonoSingleton<PlayerManager>
     }
 
     /// <summary>
-    /// 解析技能信息
+    /// 解析人物信息
     /// </summary>
     public void ParsePlayerJson()
     {
@@ -35,25 +35,19 @@ public class PlayerManager : MonoSingleton<PlayerManager>
             float lck = (temp["lck"].n);
             float restore = (temp["restore"].n);
             Player player = new Player(id, hp, mp, atk, def, spe, lck, restore);
-
+            Debug.Log(player.ToString());
             playerDict.Add(player.Id, player);
         }
     }
 
     // 获取人物信息by id
-    public Player GetSkillById(int id)
+    public Player GetPlayerById(int id)
     {
         if (playerDict != null)
         {
             return playerDict[id];
         }
         return null;
-    }
-
-    // 获取所有信息
-    public List<Player> GetSkills()
-    {
-        return playerDict.Values.ToList();
     }
 
 }

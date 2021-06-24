@@ -20,13 +20,15 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
         PlayerPanel = transform.Find("PlayerPanel");
         SpellCard = transform.Find("SpellCard");
 
-        SpellCard.GetComponent<Button>().onClick.AddListener(() =>
+        PlayerPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCard.Instance.Switch();
+            UIPlayerPanelProperty.Instance.Switch();
         });
 
-        
-
+        SpellCard.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            UIGameSpellCard.Instance.Show();
+        });
     }
 
     protected override void OnShow()
@@ -36,9 +38,9 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
         EventSystemManager.Instance.lastGameObject = PlayerPanel.gameObject;
     }
 
-    public override void Hide()
+    protected override void OnHide()
     {
-        base.Hide();
+        base.OnHide();
         EventSystemManager.Instance.lastGameObject = null;
         SkillController.Instance.Save();
     }

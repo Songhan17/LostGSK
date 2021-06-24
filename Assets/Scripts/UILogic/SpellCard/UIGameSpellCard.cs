@@ -29,41 +29,31 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         Red.GetComponent<Button>().onClick.AddListener(() =>
         {
             UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Red, Red, GetCurrentName(Red));
-            UIGameSpellCardList.Instance.Switch();
         });
         Blue.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Blue,Blue, GetCurrentName(Blue));
-            UIGameSpellCardList.Instance.Switch();
+            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Blue, Blue, GetCurrentName(Blue));
         });
         Yellow.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Yellow,Yellow, GetCurrentName(Yellow));
-            UIGameSpellCardList.Instance.Switch();
+            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Yellow, Yellow, GetCurrentName(Yellow));
         });
         White.GetComponent<Button>().onClick.AddListener(() =>
         {
             UIGameSpellCardList.Instance.Refresh(Skill.SkillType.White, White, GetCurrentName(White));
-            UIGameSpellCardList.Instance.Switch();
         });
-
-        transform.AddListener(UnityEngine.EventSystems.EventTriggerType.Cancel, _e =>
-        {
-            Hide();
-        });
-
     }
 
-    public override void Show()
+    protected override void OnShow()
     {
-        base.Show();
+        base.OnShow();
         EventSystemManager.Instance.SetCurrentGameObject(Red.gameObject);
         InitUI();
     }
 
-    public override void Hide()
+    protected override void OnHide()
     {
-        base.Hide();
+        base.OnHide();
         EventSystemManager.Instance.SetCurrentGameObject(UIGameMenu.Instance.SpellCard.gameObject);
         SkillController.Instance.UpdateSkillDict(skills);
     }
@@ -75,6 +65,7 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         {
             if (Input.GetKeyDown(KeyCode.X))
             {
+                Debug.Log("按下Card");
                 Hide();
             }
         }
@@ -144,17 +135,22 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         return skillsOfType;
     }
 
-    public void UpdateSkill(int id)
+    // 更新技能表
+    public void UpdateSkill(int id, Skill.SkillType type)
     {
         skills?.ForEach(s =>
         {
-            if (s.Id == id)
+            if (s.Type == type)
             {
-                s.IsEquip = true;
-            }
-            else
-            {
-                s.IsEquip = false;
+                if (s.Id == id)
+                {
+
+                    s.IsEquip = true;
+                }
+                else
+                {
+                    s.IsEquip = false;
+                }
             }
         });
     }

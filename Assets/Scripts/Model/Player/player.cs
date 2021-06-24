@@ -34,4 +34,10 @@ public class Player
         Lck = lck;
         Restore = restore;
     }
+
+    public override string ToString()
+    {
+        return "生命："+Hp+";"+ "能量：" + Mp + ";" + "攻击：" + Atk + ";" + "防御：" + Def
+            + ";" + "符卡值：" + Spe + ";" + "幸运值：" + Lck + ";" + "恢复速率/s：" + Restore;
+    }
 }
