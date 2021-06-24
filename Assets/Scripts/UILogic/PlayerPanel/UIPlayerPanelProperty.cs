@@ -16,7 +16,7 @@ public class UIPlayerPanelProperty : JuiSingletonExtension<UIPlayerPanelProperty
     {
         base.OnCreate();
         maxItemCount = transform.childCount;
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        playerController = GameObject.Find("PlayerA").GetComponent<PlayerController>();
     }
 
     protected override void OnShow()

@@ -65,7 +65,6 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
         {
             if (Input.GetKeyDown(KeyCode.X))
             {
-                Debug.Log("按下Card");
                 Hide();
             }
         }

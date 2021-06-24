@@ -34,6 +34,7 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
     protected override void OnShow()
     {
         base.OnShow();
+        Time.timeScale = 0;
         EventSystemManager.Instance.SetCurrentGameObject(PlayerPanel.gameObject);
         EventSystemManager.Instance.lastGameObject = PlayerPanel.gameObject;
     }
@@ -41,6 +42,7 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
     protected override void OnHide()
     {
         base.OnHide();
+        Time.timeScale = 1;
         EventSystemManager.Instance.lastGameObject = null;
         SkillController.Instance.Save();
     }

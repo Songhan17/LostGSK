@@ -119,7 +119,7 @@ public class SkillController : MonoSingleton<SkillController>
         if (PlayerPrefs.HasKey("Player_Skill") == false) return;
         string skillsData = PlayerPrefs.GetString("Player_Skill");
         Debug.Log("Load");
-        Debug.Log(skillsData);
+        //Debug.Log(skillsData);
         if (skillsData == null)
         {
             return;

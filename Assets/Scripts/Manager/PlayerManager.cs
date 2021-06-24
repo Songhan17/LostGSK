@@ -35,7 +35,6 @@ public class PlayerManager : MonoSingleton<PlayerManager>
             float lck = (temp["lck"].n);
             float restore = (temp["restore"].n);
             Player player = new Player(id, hp, mp, atk, def, spe, lck, restore);
-            Debug.Log(player.ToString());
             playerDict.Add(player.Id, player);
         }
     }
