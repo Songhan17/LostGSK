@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBase : MonoBehaviour
+[CreateAssetMenu]
+public class Player_SO : PlayerTemplate_SO
 {
-    protected Player playerData;
+
 }

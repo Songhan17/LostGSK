@@ -25,6 +25,23 @@ public class SkillController : MonoSingleton<SkillController>
         return null;
     }
 
+    public Skill GetSkillEquip(Skill.SkillType type)
+    {
+        Skill skill = null;
+        skillDict.Values.ToList().ForEach(e =>
+        {
+            if (e.Type == type)
+            {
+                if (e.IsEquip)
+                {
+                    skill = e;
+                    return;
+                }
+            }
+        });
+        return skill;
+    }
+
     // 获取技能列表
     public List<Skill> GetList(Skill.SkillType type)
     {

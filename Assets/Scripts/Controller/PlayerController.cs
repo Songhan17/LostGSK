@@ -12,7 +12,6 @@ public class PlayerController : PlayerBase
     public int moveSpeed = 5;
     private void Awake()
     {
-        playerData = PlayerManager.Instance.GetPlayerById(1);
         rigidbody2d = GetComponent<Rigidbody2D>();
     }
     void Start()
@@ -54,11 +53,6 @@ public class PlayerController : PlayerBase
             PlayerMove();
             PlayerJump();
         }
-    }
-
-    public Player PlayerData()
-    {
-        return playerData;
     }
 
     public void PlayerMove()

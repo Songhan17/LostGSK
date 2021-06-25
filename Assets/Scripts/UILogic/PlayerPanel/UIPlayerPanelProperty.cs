@@ -22,7 +22,7 @@ public class UIPlayerPanelProperty : JuiSingletonExtension<UIPlayerPanelProperty
     protected override void OnShow()
     {
         base.OnShow();
-        Refresh(playerController.PlayerData());
+        //Refresh(playerController.PlayerData());
     }
 
     public void Refresh(Player player)
