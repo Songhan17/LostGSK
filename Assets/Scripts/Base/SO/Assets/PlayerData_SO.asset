@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3133974d276888141bb928ea3531caf5, type: 3}
   m_Name: PlayerData_SO
   m_EditorClassIdentifier: 
-  hp: 0
-  currentHp: 0
-  mp: 0
-  currentMp: 0
-  atk: 0
+  hp: 100
+  currentHp: 100
+  mp: 30
+  currentMp: 30
+  atk: 5
   def: 0
-  spe: 0
-  lck: 0
-  restore: 0
+  spe: 5
+  lck: 5
+  restore: 1
   money: 0

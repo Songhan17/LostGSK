@@ -9,7 +9,7 @@
         "defense": 0,
         "description": "向前方发射一枚致命爆发",
         "duration": 0,
-        "animId": "1"
+        "animId": "Prefabs/蓄力_0"
     },
     {
         "id": 2,
@@ -183,6 +183,30 @@
         "damage": 50,
         "defense": 0,
         "description": "空袭超Up！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 16,
+        "name": "二段跳",
+        "type": "White",
+        "amount": 1,
+        "consume": 0,
+        "damage": 0,
+        "defense": 0,
+        "description": "可以进行二段跳了！",
+        "duration": 0,
+        "animId": "4"
+    },
+    {
+        "id": 17,
+        "name": "下滑铲",
+        "type": "White",
+        "amount": 1,
+        "consume": 0,
+        "damage": 0,
+        "defense": 0,
+        "description": "可以进行下滑铲了！",
         "duration": 0,
         "animId": "4"
     }

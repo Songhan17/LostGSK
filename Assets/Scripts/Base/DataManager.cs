@@ -8,35 +8,46 @@ public class DataManager : MonoSingleton<DataManager>
     public Player_SO playerSO;
 
     //[Header("生命值HP")]
-    public float Hp { get; set; }
+    [HideInInspector]
+    public float Hp { get => playerSO.hp; set => playerSO.hp = value; }
     //[Header("当前生命值HP")]
-    public float CurrentHp;
+    [HideInInspector]
+    public float CurrentHp { get => playerSO.currentHp; set => playerSO.currentHp = value; }
     //[Header("蓝量MP")]
-    public float Mp;
+    [HideInInspector]
+    public float Mp { get => playerSO.mp; set => playerSO.mp = value; }
     //[Header("当前蓝量MP")]
-    public float CurrentMp;
+    [HideInInspector]
+    public float CurrentMp { get => playerSO.currentMp; set => playerSO.currentMp = value; }
     //[Header("攻击力ATK")]
-    public float Atk;
+    [HideInInspector]
+    public float Atk { get => playerSO.atk; set => playerSO.atk = value; }
     //[Header("防御力DEF")]
-    public float Def;
+    [HideInInspector]
+    public float Def { get => playerSO.def; set => playerSO.def = value; }
     //[Header("移动速度SPE")]
-    public float Spe;
+    [HideInInspector]
+    public float Spe { get => playerSO.spe; set => playerSO.spe = value; }
     //[Header("幸运值LCK")]
-    public float Lck;
+    [HideInInspector]
+    public float Lck { get => playerSO.lck; set => playerSO.lck = value; }
     //[Header("恢复速率-mp")]
-    public float Restore;
+    [HideInInspector]
+    public float Restore { get => playerSO.restore; set => playerSO.restore = value; }
     //[Header("符卡值")]
-    public float Money;
+    [HideInInspector]
+    public float Money { get => playerSO.money; set => playerSO.money = value; }
 
-    public Skill RedSkill { get => SkillController.Instance.GetSkillEquip(Skill.SkillType.Red); }
-    public Skill BlueSkill { get => SkillController.Instance.GetSkillEquip(Skill.SkillType.Red); }
-    public Skill YellowSkill { get => SkillController.Instance.GetSkillEquip(Skill.SkillType.Red); }
-    public Skill WhiteSkill { get => SkillController.Instance.GetSkillEquip(Skill.SkillType.Red); }
+    public RedSkill RedSkill { get => (RedSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.Red); }
+    public BlueSkill BlueSkill { get => (BlueSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.Blue); }
+    public YellowSkill YellowSkill { get => (YellowSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.Yellow); }
+    public WhiteSkill WhiteSkill { get => (WhiteSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.White); }
 
-    private void Awake()
+
+    public override string ToString()
     {
-        Debug.Log(playerSO.hp);
+        return "生命：" + CurrentHp+ "/"+ Hp + ";" + "能量：" +CurrentMp +"/"+ Mp + ";" + "攻击：" + Atk + ";"
+            + "防御：" + Def + ";" + "移动速度：" + Spe + ";" + "幸运值：" + Lck + ";" + "恢复速率/s：" + Restore;
     }
-
 
 }

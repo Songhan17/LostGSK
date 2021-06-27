@@ -71,7 +71,7 @@ public class SkillManager : MonoSingleton<SkillManager>
                     break;
                 case Skill.SkillType.White:
                     // 白特有
-                    skill = new WhiteSkill();
+                    skill = new WhiteSkill(id, name, type, amount, consume, damage, defense, description, false);
                     break;
             }
             skillDict.Add(skill.Id, skill);
