@@ -8,7 +8,7 @@ public class EnemyController : EnemyBase
     [Header("敌人id")]
     public int id;
 
-
+    private GameObject shootGO;
     private Status status;
     private void Awake()
     {
@@ -84,7 +84,14 @@ public class EnemyController : EnemyBase
 
     public void Shoot()
     {
+        shootGO = Instantiate(Resources.Load<GameObject>("Prefabs/Shoot_1"),
+            transform.Find("Shoot").transform.position, Quaternion.identity);
+        shootGO.transform.SetParent(transform.Find("Shoot").transform);
+    }
 
+    public Enemy GetSelf()
+    {
+        return enemy;
     }
 
 }

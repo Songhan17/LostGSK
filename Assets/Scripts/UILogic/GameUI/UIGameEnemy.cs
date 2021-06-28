@@ -22,7 +22,7 @@ public class UIGameEnemy : JuiSingletonExtension<UIGameEnemy>
 
     public void Refresh(Enemy enemy)
     {
-        text.text = enemy.Name+":"+Mathf.Max(enemy.Hp,0);
+        text.text = enemy.Name+":"+Mathf.Max(enemy.Hp,0)+"@ 妖梦："+DataManager.Instance.CurrentHp;
         if (enemy.Hp <= 0)
         {
             Hide();
