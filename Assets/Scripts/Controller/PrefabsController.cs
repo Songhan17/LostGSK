@@ -5,8 +5,7 @@ using UnityEngine;
 public class PrefabsController : MonoBehaviour
 {
     private Rigidbody2D rigidbody2d;
-
-    private float AtkTimer;
+    private int waitTimer;
 
 
     private void Awake()
@@ -16,22 +15,18 @@ public class PrefabsController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(AtkTimer);
         Destroy(gameObject, 3f);
-        if (AtkTimer > 0)
-        {
-            AtkTimer -= Time.deltaTime;
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D target)
     {
         if (target.gameObject.CompareTag("Enemy"))
         {
+            target.GetComponent<EnemyController>().UpdateHp(DataManager.Instance.Atk);
             rigidbody2d.AddForce(new Vector2(transform.localScale.x, 0) * 550f);
             Destroy(gameObject, 0.7f);
         }
-       
+
 
     }
 
@@ -39,17 +34,15 @@ public class PrefabsController : MonoBehaviour
     {
         if (target.gameObject.CompareTag("Enemy"))
         {
-            ScheduleManager.Instance.Add(1f, () =>
-             {
-                 target.GetComponent<EnemyController>().UpdateHp(DataManager.Instance.Atk);
-             });
+            waitTimer++;
+            if (waitTimer == 16)
+            {
+                target.GetComponent<EnemyController>().UpdateHp(DataManager.Instance.Atk);
+                waitTimer = 0;
+            }
         }
     }
 
-    private void OnTriggerExit2D(Collider2D target)
-    {
-        
-    }
 
 
 }

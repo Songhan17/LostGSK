@@ -14,8 +14,8 @@ public class PlayerController : PlayerBase
     private Rigidbody2D rigidbody2d;
     private bool isPause;
     private float jumpTimer;
-    private float AtkTimer;
-    private float SkillTimer;
+    private float atkTimer;
+    private float skillTimer;
     private bool groundTouch;
 
     [Space]
@@ -66,13 +66,13 @@ public class PlayerController : PlayerBase
         {
             jumpTimer -= Time.deltaTime;
         }
-        if (AtkTimer > 0)
+        if (atkTimer > 0)
         {
-            AtkTimer -= Time.deltaTime;
+            atkTimer -= Time.deltaTime;
         }
-        if (SkillTimer > 0)
+        if (skillTimer > 0)
         {
-            SkillTimer -= Time.deltaTime;
+            skillTimer -= Time.deltaTime;
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -139,18 +139,17 @@ public class PlayerController : PlayerBase
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && AtkTimer <= 0)
+        if (Input.GetKeyDown(KeyCode.R) && atkTimer <= 0)
         {
-            AtkTimer = 0.3f;
+            atkTimer = 0.3f;
             animator.SetTrigger("IsAtk");
         }
-        
-        if (Input.GetKeyDown(KeyCode.E) && SkillTimer <= 0)
+
+        if (Input.GetKeyDown(KeyCode.E) && skillTimer <= 0)
         {
-            SkillTimer = 0.5f;
+            skillTimer = 0.5f;
             PlayerSkill();
         }
-
 
     }
 
@@ -162,16 +161,22 @@ public class PlayerController : PlayerBase
         }
         skillGameObject = Instantiate(Resources.Load<GameObject>(DataManager.Instance.RedSkill.AnimId),
             transform.Find("Skill").transform.position, Quaternion.identity);
-        skillGameObject.transform.localScale = new Vector3(transform.localScale.x,1,1);
-        skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-transform.localScale.x,0) * 600);
+        skillGameObject.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+        skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-transform.localScale.x, 0) * 600);
     }
 
     private void Walk(Vector2 dir)
     {
         if (!canMove)
             return;
-        rigidbody2d.velocity = new Vector2(dir.x * moveSpeed, rigidbody2d.velocity.y);
-
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Atk") && coll.onGround)
+        {
+            rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+        }
+        else
+        {
+            rigidbody2d.velocity = new Vector2(dir.x * moveSpeed, rigidbody2d.velocity.y);
+        }
     }
 
     private void Jump(Vector2 dir, bool wall)
@@ -212,12 +217,12 @@ public class PlayerController : PlayerBase
         if (target.gameObject.name == "door1-2")
         {
             var pos = StageController.Instance.ChangeStage(2);
-            transform.position = new Vector2(pos.x+0.8f, pos.y);
+            transform.position = new Vector2(pos.x + 0.8f, pos.y);
         }
         if (target.gameObject.name == "door1-1")
         {
             var pos = StageController.Instance.ChangeStage(1);
-            transform.position = new Vector2(pos.x- 0.4f, pos.y);
+            transform.position = new Vector2(pos.x - 0.4f, pos.y);
         }
     }
 

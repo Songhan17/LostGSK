@@ -27,23 +27,27 @@ public class EnemyController : EnemyBase
         base.Update();
         UIGameEnemy.Instance.Refresh(enemy);
         ChangeStatus();
-        if (enemy.Hp < 990 && enemy.Hp > 960)
+        if (enemy.Hp == 1000)
+        {
+           
+        }
+        else if (enemy.Hp > 960)
         {
             Debug.Log("阶段一");
             animator.speed = 2;
         }
-        else if (enemy.Hp <= 960 && enemy.Hp > 940)
+        else if (enemy.Hp > 940)
         {
             Debug.Log("阶段二");
             animator.speed = 3;
         }
-        else if (enemy.Hp <= 940 && enemy.Hp > 400 && status != Status.combat)
+        else if (enemy.Hp > 400 && status != Status.combat)
         {
             Debug.Log("阶段三");
             animator.speed = 1;
             status = Status.start;
         }
-        else if (enemy.Hp <= 400 && enemy.Hp > 0)
+        else if (enemy.Hp > 0 && enemy.Hp<=400)
         {
             Debug.Log("阶段四");
             status = Status.final_shape;
@@ -76,6 +80,11 @@ public class EnemyController : EnemyBase
                 animator.Play("Base Layer.status_2");
                 break;
         }
+    }
+
+    public void Shoot()
+    {
+
     }
 
 }
