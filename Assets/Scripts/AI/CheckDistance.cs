@@ -41,6 +41,22 @@ public class CheckView : Conditional
 }
 
 /// <summary>
+/// 检测当前状态是否应该行动
+/// </summary>
+public class CheckStatus : Conditional
+{
+
+    public override TaskStatus OnUpdate()
+    {
+        if (transform.GetComponent<EnemyController>().status == Status.combat) 
+        {
+            return TaskStatus.Success;
+        }
+        return TaskStatus.Running;
+    }
+}
+
+/// <summary>
 /// 创建检测目标的条件节点
 /// </summary>
 public class CheckTag : Conditional

@@ -5,11 +5,20 @@ using UnityEngine;
 public class EnemyPrefab : PrefabsBase
 {
     private Enemy from;
- 
     private void Start()
     {
         from = GetComponentInParent<EnemyController>().GetSelf();
         transform.SetParent(null);
+        Invoke("ChangeDict", 1f);
+    }
+
+    protected override void Update()
+    {
+        if (gameObject.name == "Stg_01(Clone)")
+        {
+            MoveOnTime();
+        }
+        Destroy(gameObject,7f);
     }
 
     private void OnTriggerEnter2D(Collider2D target)
@@ -24,5 +33,19 @@ public class EnemyPrefab : PrefabsBase
     {
         Destroy(gameObject);
     }
+
+    public void MoveOnTime()
+    {
+        transform.Translate(new Vector3(transform.rotation.x, transform.rotation.y, transform.position.z)
+            * 400f * Time.deltaTime, Space.World);
+    }
+
+    public void ChangeDict()
+    {
+     
+        //transform.rotation *= Quaternion.AngleAxis(2f,new Vector2(-transform.rotation.x, -transform.rotation.y));
+        transform.rotation = Quaternion.AngleAxis(2f,new Vector2(-transform.rotation.x, -transform.rotation.y));
+    }
+
 
 }

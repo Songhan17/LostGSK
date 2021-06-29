@@ -9,7 +9,7 @@ public class EnemyController : EnemyBase
     public int id;
 
     private GameObject shootGO;
-    private Status status;
+    public Status status;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -33,23 +33,19 @@ public class EnemyController : EnemyBase
         }
         else if (enemy.Hp > 960)
         {
-            Debug.Log("阶段一");
             animator.speed = 2;
         }
         else if (enemy.Hp > 940)
         {
-            Debug.Log("阶段二");
             animator.speed = 3;
         }
         else if (enemy.Hp > 400 && status != Status.combat)
         {
-            Debug.Log("阶段三");
             animator.speed = 1;
             status = Status.start;
         }
         else if (enemy.Hp > 0 && enemy.Hp<=400)
         {
-            Debug.Log("阶段四");
             status = Status.final_shape;
         }
     }
@@ -70,7 +66,6 @@ public class EnemyController : EnemyBase
                 animator.Play("Base Layer.start");
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("start"))
                 {
-                    Debug.Log("start");
                     status = Status.combat;
                 }
                 break;
@@ -89,9 +84,34 @@ public class EnemyController : EnemyBase
         shootGO.transform.SetParent(transform.Find("Shoot").transform);
     }
 
+    public void Stg_01()
+    {
+        StartCoroutine(Spherical());
+    }
+
     public Enemy GetSelf()
     {
         return enemy;
+    }
+
+    IEnumerator Spherical()
+    {
+        Vector3 fireDir = transform.up;
+        Quaternion startQua = Quaternion.AngleAxis(10, Vector3.forward);
+        for (int i = 0; i < 15; i++)
+        {
+            for (int j = 0; j < 36; j++)
+            {
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Stg_01"));
+                go.transform.SetParent(transform);
+                go.transform.position = transform.position;
+                go.transform.rotation = Quaternion.Euler(fireDir);
+                fireDir = startQua * fireDir;
+            }
+            yield return new WaitForSeconds(1f);
+        }
+
+        yield return 0;
     }
 
 }
