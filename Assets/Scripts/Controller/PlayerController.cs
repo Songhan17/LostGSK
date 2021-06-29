@@ -47,6 +47,8 @@ public class PlayerController : PlayerBase
     void Start()
     {
         isPause = false;
+        GameObjectPoolManager.Instance.Register("蓄力_0", Resources.Load<GameObject>("Prefabs/蓄力_0")
+            , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(5);
     }
 
     void Update()
@@ -159,8 +161,8 @@ public class PlayerController : PlayerBase
         {
             return;
         }
-        skillGameObject = Instantiate(Resources.Load<GameObject>(DataManager.Instance.RedSkill.AnimId),
-            transform.Find("Skill").transform.position, Quaternion.identity);
+        skillGameObject = GameObjectPoolManager.Instance.Get("蓄力_0");
+        skillGameObject.transform.position = transform.Find("Skill").transform.position;
         skillGameObject.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-transform.localScale.x, 0) * 600);
     }

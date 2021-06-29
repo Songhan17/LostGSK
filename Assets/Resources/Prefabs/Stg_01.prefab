@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6659042860156378833}
   - component: {fileID: 2128054498225706395}
   - component: {fileID: -3093762484117646740}
+  - component: {fileID: 610752540044101091}
   m_Layer: 11
   m_Name: Stg_01
   m_TagString: Untagged
@@ -71,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 5395d8788ec86fe4e8553e95c05b7019, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -111,3 +112,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd6b174b9c85a9438e9aabd54594a47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &610752540044101091
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5068779635671559076}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

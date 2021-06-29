@@ -20,6 +20,10 @@ public class EnemyController : EnemyBase
         enemy = EnemyManager.Instance.GetEnemyById(id);
         UIGameEnemy.Instance.Show();
         status = Status.idle;
+        GameObjectPoolManager.Instance.Register("Stg_01", Resources.Load<GameObject>("Prefabs/Stg_01")
+            , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(100);
+        GameObjectPoolManager.Instance.Register("Shoot_1", Resources.Load<GameObject>("Prefabs/Shoot_1")
+            , go => go.SetActive(true), go => go.SetActive(false));
     }
 
     protected override void Update()
@@ -79,8 +83,8 @@ public class EnemyController : EnemyBase
 
     public void Shoot()
     {
-        shootGO = Instantiate(Resources.Load<GameObject>("Prefabs/Shoot_1"),
-            transform.Find("Shoot").transform.position, Quaternion.identity);
+        shootGO = GameObjectPoolManager.Instance.Get("Shoot_1");
+        shootGO.transform.position = transform.Find("Shoot").transform.position;
         shootGO.transform.SetParent(transform.Find("Shoot").transform);
     }
 
@@ -102,7 +106,7 @@ public class EnemyController : EnemyBase
         {
             for (int j = 0; j < 36; j++)
             {
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Stg_01"));
+                GameObject go = GameObjectPoolManager.Instance.Get("Stg_01");
                 go.transform.SetParent(transform);
                 go.transform.position = transform.position;
                 go.transform.rotation = Quaternion.Euler(fireDir);

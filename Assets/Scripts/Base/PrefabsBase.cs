@@ -5,8 +5,27 @@ using UnityEngine;
 public class PrefabsBase : MonoBehaviour
 {
 
+    protected virtual void Start()
+    {
+        Invoke("DestroySelf", 10f);
+    }
     protected virtual void Update()
     {
-        Destroy(gameObject, 3f);
+        
     }
+
+    protected void OnTriggerExit2D(Collider2D target)
+    {
+        if (target.CompareTag("Limit"))
+        {
+            Debug.Log("Limit");
+            DestroySelf();
+        }
+    }
+
+    protected void DestroySelf()
+    {
+        GameObjectPoolManager.Instance.Recycle(gameObject);
+    }
+
 }

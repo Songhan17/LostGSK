@@ -5,8 +5,9 @@ using UnityEngine;
 public class EnemyPrefab : PrefabsBase
 {
     private Enemy from;
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         from = GetComponentInParent<EnemyController>().GetSelf();
         transform.SetParent(null);
         Invoke("ChangeDict", 1f);
@@ -18,7 +19,6 @@ public class EnemyPrefab : PrefabsBase
         {
             MoveOnTime();
         }
-        Destroy(gameObject,7f);
     }
 
     private void OnTriggerEnter2D(Collider2D target)
@@ -29,10 +29,6 @@ public class EnemyPrefab : PrefabsBase
         }
     }
 
-    public void DestroySelf()
-    {
-        Destroy(gameObject);
-    }
 
     public void MoveOnTime()
     {
@@ -42,8 +38,6 @@ public class EnemyPrefab : PrefabsBase
 
     public void ChangeDict()
     {
-     
-        //transform.rotation *= Quaternion.AngleAxis(2f,new Vector2(-transform.rotation.x, -transform.rotation.y));
         transform.rotation = Quaternion.AngleAxis(2f,new Vector2(-transform.rotation.x, -transform.rotation.y));
     }
 

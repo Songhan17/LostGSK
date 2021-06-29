@@ -19,7 +19,7 @@ public class PlayerPrefabs : PrefabsBase
         {
             target.GetComponent<EnemyController>().UpdateHp(DataManager.Instance.Atk);
             rigidbody2d.AddForce(new Vector2(transform.localScale.x, 0) * 550f);
-            Destroy(gameObject, 0.7f);
+            Invoke("DestroySelf", 0.7f);
         }
     }
 
