@@ -118,6 +118,12 @@ public class EnemyController : EnemyBase
         yield return 0;
     }
 
+    public void LookAtPlayer()
+    {
+        transform.localScale = new Vector2(transform.position.x > PlayerController.Instance.transform.position.x ? 1 : -1, 1);
+    }
+
+
 }
 public enum Status
 {

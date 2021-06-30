@@ -12,7 +12,7 @@ public class CheckDistance : Conditional
 
     public override TaskStatus OnUpdate()
     {
-        if (Vector3.Distance(transform.position, Target.Value.position) <= Distance.Value)
+        if (Vector2.Distance(transform.position, Target.Value.position) <= Distance.Value)
         {
             return TaskStatus.Success;
         }
@@ -48,7 +48,7 @@ public class CheckStatus : Conditional
 
     public override TaskStatus OnUpdate()
     {
-        if (transform.GetComponent<EnemyController>().status == Status.combat) 
+        if (transform.GetComponent<EnemyController>().status == Status.combat)
         {
             return TaskStatus.Success;
         }
@@ -59,43 +59,43 @@ public class CheckStatus : Conditional
 /// <summary>
 /// 创建检测目标的条件节点
 /// </summary>
-public class CheckTag : Conditional
+public class CheckOnLine : Conditional
 {
-
     public SharedString PlayerTag;
     public SharedTransform Target;
     public SharedBool RayHitPlayer;//是否检测到目标
 
-    public override void OnStart()
-    {
-        transform.LookAt(Target.Value.position);//第一进入视野范围就看向目标
-    }
 
     public override TaskStatus OnUpdate()
     {
         if (RayHitPlayer.Value)//如果检测到目标就看向目标
         {
-            transform.LookAt(Target.Value.position);
+            transform.localScale = new Vector2(transform.position.x > Target.Value.position.x ? 1 : -1, 1);
         }
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 20))
+
+        Ray2D ray = new Ray2D(transform.position, new Vector2(-transform.localScale.x, 0));
+        RaycastHit2D hitLeft = Physics2D.Raycast(ray.origin, ray.direction, 5);
+        RaycastHit2D hitRight = Physics2D.Raycast(ray.origin, -ray.direction, 5);
+        if (hitLeft.collider != null)
         {
-            if (hit.collider.tag == (string)PlayerTag.GetValue())//射线检测到目标
+            if (hitLeft.collider.tag == (string)PlayerTag.GetValue())//射线检测到目标
             {
                 RayHitPlayer.SetValue(true);
                 return TaskStatus.Success;
             }
-            else//检测到的不是目标
-            {
-                RayHitPlayer.SetValue(false);
-                return TaskStatus.Running;
-            }
-
         }
-        else//射线什么也没检测到那么也默认为检测到目标，因为在这个节点里面，此时目标肯定是在视野范围内的并且没有被障碍物遮挡视野
+        else if (hitRight.collider != null)
         {
-            RayHitPlayer.SetValue(true);
+            if (hitRight.collider.tag == (string)PlayerTag.GetValue())//射线检测到目标
+            {
+                RayHitPlayer.SetValue(true);
+                return TaskStatus.Success;
+            }
+        }
+        else
+        {
+            RayHitPlayer.SetValue(false);
+            return TaskStatus.Running;
         }
         return TaskStatus.Running;
     }
@@ -126,6 +126,28 @@ public class MoveToTarget : Action
         }
 
         return TaskStatus.Running;
+    }
+}
+
+/// <summary>
+/// 看向目标
+/// </summary>
+public class LookAtTarget : Action
+{
+    public SharedTransform Target;
+
+    public override TaskStatus OnUpdate()
+    {
+        if (transform.position.x > Target.Value.position.x)//表示已经移动到目标身边
+        {
+            transform.localScale = new Vector2(1, 1);
+            return TaskStatus.Success;
+        }
+        else
+        {
+            transform.localScale = new Vector2(-1, 1);
+            return TaskStatus.Success;
+        }
     }
 }
 

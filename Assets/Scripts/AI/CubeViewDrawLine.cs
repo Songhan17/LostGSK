@@ -16,8 +16,13 @@ public class CubeViewDrawLine : MonoBehaviour
 
     private void Update()
     {
-        GetLineEndPoint(leftLineEndPoint, lineLeft, -40);
-        GetLineEndPoint(rightLinEndPoint, lineRight, 40);
+        //GetLineEndPoint(leftLineEndPoint, lineLeft, -40);
+        //GetLineEndPoint(rightLinEndPoint, lineRight, 40);
+        Ray ray = new Ray(transform.position, new Vector2(-transform.localScale.x,0));
+
+        Debug.DrawRay(ray.origin, ray.direction * 5, Color.black);
+        Debug.DrawRay(ray.origin, -ray.direction * 5, Color.blue);
+
     }
 
     /// <summary>
@@ -48,4 +53,13 @@ public class CubeViewDrawLine : MonoBehaviour
         line.endWidth = 0.1f;
         line.material.color = Color.red;
     }
+
+    void OnDrawGizmos()
+    {
+        //Gizmos.color = Color.red;
+
+        //Gizmos.DrawWireSphere((Vector2)transform.position, 10);
+
+    }
+
 }
