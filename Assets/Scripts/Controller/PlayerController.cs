@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : PlayerBase
 {
 
-    private bool facingRight = false;
+    private bool facingRight = true;
     private Collision coll;
     private Animator animator;
 
@@ -164,7 +164,7 @@ public class PlayerController : PlayerBase
         skillGameObject = GameObjectPoolManager.Instance.Get("蓄力_0");
         skillGameObject.transform.position = transform.Find("Skill").transform.position;
         skillGameObject.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-        skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-transform.localScale.x, 0) * 600);
+        skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.localScale.x, 0) * 600);
     }
 
     private void Walk(Vector2 dir)
