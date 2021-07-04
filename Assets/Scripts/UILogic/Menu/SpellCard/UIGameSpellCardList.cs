@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[JuiPanel(UiPath = "MenuPanel/SpellCard/CardList",EnableUpdate =true)]
 public class UIGameSpellCardList : JuiSingletonExtension<UIGameSpellCardList>
 {
-    public override string uiPath => "MenuPanel/SpellCard/CardList";
 
     private int maxItemCount;
     private Transform group;

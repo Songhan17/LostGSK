@@ -30,6 +30,7 @@ public class Collision : MonoBehaviour
     //public Vector2 rightOffsetUp;
     //public Vector2 rightOffset;
     //public Vector2 rightOffsetDown;
+    //public Vector2 cencelOffset;
 
 
     [Space]
@@ -42,21 +43,23 @@ public class Collision : MonoBehaviour
 
     [Header("Collision")]
     public float collisionRadius = 0.25f;
-    private Color debugCollisionColor = Color.red;
+    //private Color debugCollisionColor = Color.red;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
-        //onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer)||
-        //    Physics2D.OverlapCircle((Vector2)transform.position + rightBottom, collisionRadius, groundLayer)||
-        //    Physics2D.OverlapCircle((Vector2)transform.position + leftBottom, collisionRadius, groundLayer);
+        //onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
+        onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer) ||
+            Physics2D.OverlapCircle((Vector2)transform.position + rightBottom, collisionRadius, groundLayer) ||
+            Physics2D.OverlapCircle((Vector2)transform.position + leftBottom, collisionRadius, groundLayer);
+            //Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, groundLayer)||
+            //Physics2D.OverlapCircle((Vector2)transform.position + rightOffsetUp, collisionRadius, groundLayer)||
+            //Physics2D.OverlapCircle((Vector2)transform.position + rightOffsetDown, collisionRadius, groundLayer)||
+            //Physics2D.OverlapCircle((Vector2)transform.position + cencelOffset, collisionRadius, groundLayer);
 
         //onWall = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, groundLayer) 
         //    || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, groundLayer)
@@ -84,12 +87,13 @@ public class Collision : MonoBehaviour
         //var positions = new Vector2[] { bottomOffset, new Vector2(0,0), new Vector2(0, 0) };
 
         Gizmos.DrawWireSphere((Vector2)transform.position  + bottomOffset, collisionRadius);
-        //Gizmos.DrawWireSphere((Vector2)transform.position + leftBottom, collisionRadius);
-        //Gizmos.DrawWireSphere((Vector2)transform.position + rightBottom, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + leftBottom, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + rightBottom, collisionRadius);
 
         //Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
         //Gizmos.DrawWireSphere((Vector2)transform.position + rightOffsetUp, collisionRadius);
         //Gizmos.DrawWireSphere((Vector2)transform.position + rightOffsetDown, collisionRadius);
+        //Gizmos.DrawWireSphere((Vector2)transform.position + cencelOffset, collisionRadius);
 
 
         //Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);

@@ -9,34 +9,34 @@ public class DataManager : MonoSingleton<DataManager>
 
     //[Header("生命值HP")]
     [HideInInspector]
-    public float Hp { get => playerSO.hp; set => playerSO.hp = value; }
+    public int Hp { get => playerSO.hp; set => playerSO.hp = value; }
     //[Header("当前生命值HP")]
     [HideInInspector]
-    public float CurrentHp { get => playerSO.currentHp; set => playerSO.currentHp = value; }
+    public int CurrentHp { get => playerSO.currentHp; set => playerSO.currentHp = value; }
     //[Header("蓝量MP")]
     [HideInInspector]
-    public float Mp { get => playerSO.mp; set => playerSO.mp = value; }
+    public int Mp { get => playerSO.mp; set => playerSO.mp = value; }
     //[Header("当前蓝量MP")]
     [HideInInspector]
-    public float CurrentMp { get => playerSO.currentMp; set => playerSO.currentMp = value; }
+    public int CurrentMp { get => playerSO.currentMp; set => playerSO.currentMp = value; }
     //[Header("攻击力ATK")]
     [HideInInspector]
-    public float Atk { get => playerSO.atk; set => playerSO.atk = value; }
+    public int Atk { get => playerSO.atk; set => playerSO.atk = value; }
     //[Header("防御力DEF")]
     [HideInInspector]
-    public float Def { get => playerSO.def; set => playerSO.def = value; }
+    public int Def { get => playerSO.def; set => playerSO.def = value; }
     //[Header("移动速度SPE")]
     [HideInInspector]
-    public float Spe { get => playerSO.spe; set => playerSO.spe = value; }
+    public int Spe { get => playerSO.spe; set => playerSO.spe = value; }
     //[Header("幸运值LCK")]
     [HideInInspector]
-    public float Lck { get => playerSO.lck; set => playerSO.lck = value; }
+    public int Lck { get => playerSO.lck; set => playerSO.lck = value; }
     //[Header("恢复速率-mp")]
     [HideInInspector]
     public float Restore { get => playerSO.restore; set => playerSO.restore = value; }
     //[Header("符卡值")]
     [HideInInspector]
-    public float Money { get => playerSO.money; set => playerSO.money = value; }
+    public int Money { get => playerSO.money; set => playerSO.money = value; }
 
     public RedSkill RedSkill { get => (RedSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.Red); }
     public BlueSkill BlueSkill { get => (BlueSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.Blue); }

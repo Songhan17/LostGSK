@@ -45,7 +45,6 @@ public class Skill
         Description = des;
         IsEquip = isEquip;
     }
-}
 /// <summary>
 /// 技能类型
 /// </summary>
@@ -55,4 +54,5 @@ public enum SkillType
     Blue,
     Yellow,
     White
+}
 }

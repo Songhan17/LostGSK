@@ -167,7 +167,6 @@ public static class TransformExtension
         }
         return count;
     }
-
 }
 
 public static class VertexHelperExtension

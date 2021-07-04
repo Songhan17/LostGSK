@@ -21,7 +21,7 @@ public class EnemyController : EnemyBase
         UIGameEnemy.Instance.Show();
         status = Status.idle;
         GameObjectPoolManager.Instance.Register("Stg_01", Resources.Load<GameObject>("Prefabs/Stg_01")
-            , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(100);
+            , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(5);
         GameObjectPoolManager.Instance.Register("Shoot_1", Resources.Load<GameObject>("Prefabs/Shoot_1")
             , go => go.SetActive(true), go => go.SetActive(false));
     }

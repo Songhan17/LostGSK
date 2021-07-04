@@ -17,6 +17,10 @@ public class PlayerController : PlayerBase
     private float atkTimer;
     private float skillTimer;
     private bool groundTouch;
+    private bool isAtk;
+    private bool isSkill;
+    private bool isSit;
+    private bool isSlide;
 
     [Space]
     [Header("Stats")]
@@ -49,11 +53,11 @@ public class PlayerController : PlayerBase
         isPause = false;
         GameObjectPoolManager.Instance.Register("蓄力_0", Resources.Load<GameObject>("Prefabs/蓄力_0")
             , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(5);
+        UIGamePlayerStatus.Instance.Show();
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-
         //读取方向输入
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
@@ -61,8 +65,45 @@ public class PlayerController : PlayerBase
         float xRaw = Input.GetAxisRaw("Horizontal");
         float yRaw = Input.GetAxisRaw("Vertical");
         Vector2 dir = new Vector2(x, y);
+        Vector2 dirRaw = new Vector2(xRaw, yRaw);
 
-        Walk(dir);
+        Walk(dir, dirRaw, isAtk, isSkill);
+
+        //Flip Check
+        if (x > 0 && !facingRight)
+        {
+            // ... flip the player.
+            Flip();
+        }
+        // Otherwise if the input is moving the player left and the player is facing right...
+        else if (x < 0 && facingRight)
+        {
+            // ... flip the player.
+            Flip();
+        }
+
+        if (isSlide)
+        {
+            StartCoroutine(SitSlide());
+        }
+
+    }
+    void Update()
+    {
+
+        isAtk = animator.GetCurrentAnimatorStateInfo(0).IsName("atk");
+        isSkill = animator.GetCurrentAnimatorStateInfo(0).IsName("spellcard");
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("idle") && coll.onGround)
+        {
+            rigidbody2d.constraints = RigidbodyConstraints2D.FreezePositionX;
+            rigidbody2d.freezeRotation = true;
+        }
+        else
+        {
+            rigidbody2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+
 
         if (jumpTimer > 0)
         {
@@ -79,6 +120,12 @@ public class PlayerController : PlayerBase
 
         if (Input.GetButtonDown("Jump"))
         {
+            if (isSit)
+            {
+                animator.Play("slideShovel");
+                isSlide = true;
+                return;
+            }
             canDoubleJump = DataManager.Instance.WhiteSkill != null && DataManager.Instance.WhiteSkill.Id == 16;
             if (coll.onGround)
                 Jump(Vector2.up, false);
@@ -99,19 +146,6 @@ public class PlayerController : PlayerBase
         if (!coll.onGround && groundTouch)
         {
             groundTouch = false;
-        }
-
-        //Flip Check
-        if (x > 0 && !facingRight)
-        {
-            // ... flip the player.
-            Flip();
-        }
-        // Otherwise if the input is moving the player left and the player is facing right...
-        else if (x < 0 && facingRight)
-        {
-            // ... flip the player.
-            Flip();
         }
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -143,41 +177,101 @@ public class PlayerController : PlayerBase
 
         if (Input.GetKeyDown(KeyCode.R) && atkTimer <= 0)
         {
-            atkTimer = 0.3f;
-            animator.SetTrigger("IsAtk");
+            if (isSit || isSlide)
+                return;
+            animator.Play("atk");
         }
 
         if (Input.GetKeyDown(KeyCode.E) && skillTimer <= 0)
         {
+            if (isSit || isSlide)
+                return;
+            if (DataManager.Instance.RedSkill.Id != 1)
+            {
+                return;
+            }
             skillTimer = 0.5f;
-            PlayerSkill();
+            animator.Play("spellcard");
+            StartCoroutine(PlayerSkill());
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("slideShovel"))
+                return;
+            Sit();
+        }
+        else
+        {
+            isSit = false;
+        }
+
+        if (rigidbody2d.velocity.y > 0.8f)
+        {
+            if (isAtk)
+                return;
+            if (isSkill)
+                return;
+            animator.Play("jump");
+        }
+        else if (rigidbody2d.velocity.y < -0.8f)
+        {
+            if (isAtk)
+                return;
+            if (isSkill)
+                return;
+            animator.Play("fail");
+        }
+
+        if (DataManager.Instance.CurrentHp == 0)
+        {
+            Dead();
+            this.enabled = false;
         }
 
     }
 
-    private void PlayerSkill()
+    IEnumerator PlayerSkill()
     {
-        if (DataManager.Instance.RedSkill.Id != 1)
-        {
-            return;
-        }
+        yield return new WaitForSeconds(0.3f);
         skillGameObject = GameObjectPoolManager.Instance.Get("蓄力_0");
         skillGameObject.transform.position = transform.Find("Skill").transform.position;
         skillGameObject.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
         skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.localScale.x, 0) * 600);
     }
 
-    private void Walk(Vector2 dir)
+    private void Walk(Vector2 dir, Vector2 dirRaw, bool atk, bool skill)
     {
-        if (!canMove)
+        if (!canMove||isSlide)
             return;
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Atk") && coll.onGround)
+        if (atk || skill || isSit)
         {
-            rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+            if (coll.onGround)
+            {
+                rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+            }
         }
         else
         {
+            if (rigidbody2d.velocity.y > 0.8f && rigidbody2d.velocity.y < -0.8f)
+            {
+                return;
+            }
             rigidbody2d.velocity = new Vector2(dir.x * moveSpeed, rigidbody2d.velocity.y);
+            if (!coll.onGround)
+            {
+                return;
+            }
+            if (dirRaw.x != 0)
+            {
+                animator.Play("run");
+            }
+            else
+            {
+                rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+                animator.Play("idle");
+            }
+
         }
     }
 
@@ -198,6 +292,22 @@ public class PlayerController : PlayerBase
         }
     }
 
+    public void Sit()
+    {
+
+        if (!coll.onGround)
+            return;
+        isSit = true;
+        animator.Play("sit");
+    }
+
+    IEnumerator SitSlide()
+    {
+        rigidbody2d.AddForce(new Vector2(transform.localScale.x, 0) * 30);
+        yield return new WaitForSeconds(0.3f);
+        isSlide = false;
+    }
+
     private void Flip()
     {
         // Switch the way the player is labelled as facing.
@@ -212,6 +322,11 @@ public class PlayerController : PlayerBase
     void GroundTouch()
     {
         doubleJumped = false;
+    }
+
+    public void Dead()
+    {
+        animator.SetTrigger("IsDead");
     }
 
     private void OnTriggerEnter2D(Collider2D target)

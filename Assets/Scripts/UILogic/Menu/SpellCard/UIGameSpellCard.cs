@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[JuiPanel(UiPath = "MenuPanel/SpellCard/Card",EnableUpdate =true)]
 public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
 {
-    public override string uiPath => "MenuPanel/SpellCard/Card";
 
     private Transform Red;
     private Transform Blue;

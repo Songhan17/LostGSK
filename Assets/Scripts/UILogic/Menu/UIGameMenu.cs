@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[JuiPanel(UiPath = "MenuPanel",EnableUpdate =true)]
 public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
 {
-    public override string uiPath => "MenuPanel";
 
     public Transform PlayerPanel { get; private set; }
     public Transform SpellCard { get; private set; }
@@ -37,6 +37,7 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
         Time.timeScale = 0;
         EventSystemManager.Instance.SetCurrentGameObject(PlayerPanel.gameObject);
         EventSystemManager.Instance.lastGameObject = PlayerPanel.gameObject;
+        PlayerController.Instance.enabled = false;
     }
 
     protected override void OnHide()
@@ -45,6 +46,7 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
         Time.timeScale = 1;
         EventSystemManager.Instance.lastGameObject = null;
         SkillController.Instance.Save();
+        PlayerController.Instance.enabled = true;
     }
 
     protected override void OnUpdate()

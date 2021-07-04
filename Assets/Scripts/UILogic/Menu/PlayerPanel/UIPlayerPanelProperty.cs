@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[JuiPanel(UiPath = "MenuPanel/PlayerPanel/property",EnableUpdate =true)]
 public class UIPlayerPanelProperty : JuiSingletonExtension<UIPlayerPanelProperty>
 {
-    public override string uiPath => "MenuPanel/PlayerPanel/property";
-
-    private int maxItemCount;
-
-
 
     protected override void OnCreate()
     {
         base.OnCreate();
-        maxItemCount = transform.childCount;
     }
 
     protected override void OnShow()
     {
         base.OnShow();
         Refresh(DataManager.Instance.ToString());
+    }
+
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+        EventSystemManager.Instance.SetCurrentGameObject(transform.parent.gameObject);
     }
 
     public void Refresh(string target)

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[JuiPanel(UiPath ="UI",IsPreBind =false)]
 public class UIGameEnemy : JuiSingletonExtension<UIGameEnemy>
 {
-    public override string uiPath => "UI";
-
     private Text text;
 
     protected override void OnCreate()
