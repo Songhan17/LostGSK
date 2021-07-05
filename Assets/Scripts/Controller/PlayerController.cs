@@ -21,6 +21,7 @@ public class PlayerController : PlayerBase
     private bool isSkill;
     private bool isSit;
     private bool isSlide;
+    private bool isJump;
 
     [Space]
     [Header("Stats")]
@@ -56,38 +57,7 @@ public class PlayerController : PlayerBase
         UIGamePlayerStatus.Instance.Show();
     }
 
-    private void FixedUpdate()
-    {
-        //读取方向输入
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-        //读取即时方向输入
-        float xRaw = Input.GetAxisRaw("Horizontal");
-        float yRaw = Input.GetAxisRaw("Vertical");
-        Vector2 dir = new Vector2(x, y);
-        Vector2 dirRaw = new Vector2(xRaw, yRaw);
 
-        Walk(dir, dirRaw, isAtk, isSkill);
-
-        //Flip Check
-        if (x > 0 && !facingRight)
-        {
-            // ... flip the player.
-            Flip();
-        }
-        // Otherwise if the input is moving the player left and the player is facing right...
-        else if (x < 0 && facingRight)
-        {
-            // ... flip the player.
-            Flip();
-        }
-
-        if (isSlide)
-        {
-            StartCoroutine(SitSlide());
-        }
-
-    }
     void Update()
     {
 
@@ -128,12 +98,12 @@ public class PlayerController : PlayerBase
             }
             canDoubleJump = DataManager.Instance.WhiteSkill != null && DataManager.Instance.WhiteSkill.Id == 16;
             if (coll.onGround)
-                Jump(Vector2.up, false);
+                isJump = true;
 
             if (!coll.onGround && !doubleJumped && canDoubleJump)
             {
                 doubleJumped = true;
-                Jump(Vector2.up, false);
+                isJump = true;
             }
         }
 
@@ -206,7 +176,7 @@ public class PlayerController : PlayerBase
             isSit = false;
         }
 
-        if (rigidbody2d.velocity.y > 0.8f)
+        if (rigidbody2d.velocity.y > 1.5f)
         {
             if (isAtk)
                 return;
@@ -214,7 +184,7 @@ public class PlayerController : PlayerBase
                 return;
             animator.Play("jump");
         }
-        else if (rigidbody2d.velocity.y < -0.8f)
+        else if (rigidbody2d.velocity.y < -1.5f)
         {
             if (isAtk)
                 return;
@@ -231,6 +201,41 @@ public class PlayerController : PlayerBase
 
     }
 
+    private void FixedUpdate()
+    {
+        //读取方向输入
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+        //读取即时方向输入
+        float xRaw = Input.GetAxisRaw("Horizontal");
+        float yRaw = Input.GetAxisRaw("Vertical");
+        Vector2 dir = new Vector2(x, y);
+        Vector2 dirRaw = new Vector2(xRaw, yRaw);
+
+        Walk(dir, dirRaw);
+
+        //Flip Check
+        if (x > 0 && !facingRight)
+        {
+            // ... flip the player.
+            Flip();
+        }
+        // Otherwise if the input is moving the player left and the player is facing right...
+        else if (x < 0 && facingRight)
+        {
+            // ... flip the player.
+            Flip();
+        }
+
+        if (isSlide)
+        {
+            StartCoroutine(SitSlide());
+        }
+
+        Jump(Vector2.up, isJump);
+
+    }
+
     IEnumerator PlayerSkill()
     {
         yield return new WaitForSeconds(0.3f);
@@ -240,11 +245,11 @@ public class PlayerController : PlayerBase
         skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.localScale.x, 0) * 600);
     }
 
-    private void Walk(Vector2 dir, Vector2 dirRaw, bool atk, bool skill)
+    private void Walk(Vector2 dir, Vector2 dirRaw)
     {
-        if (!canMove||isSlide)
+        if (!canMove || isSlide)
             return;
-        if (atk || skill || isSit)
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("atk") || animator.GetCurrentAnimatorStateInfo(0).IsName("spellcard") || isSit)
         {
             if (coll.onGround)
             {
@@ -253,11 +258,11 @@ public class PlayerController : PlayerBase
         }
         else
         {
-            if (rigidbody2d.velocity.y > 0.8f && rigidbody2d.velocity.y < -0.8f)
+            if (rigidbody2d.velocity.y > 1f && rigidbody2d.velocity.y < -1f)
             {
                 return;
             }
-            rigidbody2d.velocity = new Vector2(dir.x * moveSpeed, rigidbody2d.velocity.y);
+            rigidbody2d.velocity = new Vector2(dirRaw.x * moveSpeed, rigidbody2d.velocity.y);
             if (!coll.onGround)
             {
                 return;
@@ -277,18 +282,22 @@ public class PlayerController : PlayerBase
 
     private void Jump(Vector2 dir, bool wall)
     {
+        if (!wall)
+            return;
         //二段跳
         if (doubleJumped)
         {
             rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0);
             rigidbody2d.velocity += dir * jumpForce;
             jumpTimer = 0.2f;
+            isJump = false;
         }
         else
         {
             rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0);
             rigidbody2d.velocity += dir * jumpForce;
             jumpTimer = 0.2f;
+            isJump = false;
         }
     }
 
