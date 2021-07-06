@@ -22,6 +22,7 @@ public class PlayerController : PlayerBase
     private bool isSit;
     private bool isSlide;
     private bool isJump;
+    private bool isIdle;
 
     [Space]
     [Header("Stats")]
@@ -212,7 +213,7 @@ public class PlayerController : PlayerBase
         Vector2 dir = new Vector2(x, y);
         Vector2 dirRaw = new Vector2(xRaw, yRaw);
 
-        Walk(dir, dirRaw);
+        Walk(dir, dirRaw, isIdle);
 
         //Flip Check
         if (x > 0 && !facingRight)
@@ -245,7 +246,7 @@ public class PlayerController : PlayerBase
         skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.localScale.x, 0) * 600);
     }
 
-    private void Walk(Vector2 dir, Vector2 dirRaw)
+    private void Walk(Vector2 dir, Vector2 dirRaw,bool isIdle)
     {
         if (!canMove || isSlide)
             return;
@@ -269,11 +270,16 @@ public class PlayerController : PlayerBase
             }
             if (dirRaw.x != 0)
             {
+                if (!isIdle)
+                    return;
                 animator.Play("run");
             }
             else
             {
+                if (!isIdle)
+                    return;
                 rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+                Debug.Log("idle");
                 animator.Play("idle");
             }
 
@@ -343,12 +349,24 @@ public class PlayerController : PlayerBase
         if (target.gameObject.name == "door1-2")
         {
             var pos = StageController.Instance.ChangeStage(2);
-            transform.position = new Vector2(pos.x + 0.8f, pos.y);
+            transform.position = new Vector2(pos.x + 1f, pos.y);
         }
         if (target.gameObject.name == "door1-1")
         {
             var pos = StageController.Instance.ChangeStage(1);
-            transform.position = new Vector2(pos.x - 0.4f, pos.y);
+            transform.position = new Vector2(pos.x - 0.5f, pos.y);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D target)
+    {
+        if (target.gameObject.layer == 9)
+        {
+            isIdle = false;
+        }
+        else
+        {
+            isIdle = true;
         }
     }
 

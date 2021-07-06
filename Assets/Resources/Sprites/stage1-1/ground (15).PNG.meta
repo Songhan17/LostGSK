@@ -92,8 +92,8 @@ TextureImporter:
       - {x: -64, y: -64}
       - {x: 64, y: -64}
       - {x: 64, y: 26}
-      - {x: -22, y: 26}
-      - {x: -22, y: 64}
+      - {x: -9, y: 26}
+      - {x: -9, y: 64}
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
