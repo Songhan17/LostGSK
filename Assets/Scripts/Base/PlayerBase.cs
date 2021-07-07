@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBase : MonoSingleton<PlayerBase>
+public class PlayerBase : MonoBehaviour
 {
     protected Player playerData;
 }

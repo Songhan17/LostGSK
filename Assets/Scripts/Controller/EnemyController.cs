@@ -4,20 +4,12 @@ using UnityEngine;
 
 public class EnemyController : EnemyBase
 {
-
-    [Header("敌人id")]
-    public int id;
-
     private GameObject shootGO;
     public Status status;
-    private void Awake()
-    {
-        animator = GetComponent<Animator>();
-    }
 
-    private void Start()
+    protected override void Start()
     {
-        enemy = EnemyManager.Instance.GetEnemyById(id);
+        base.Start();
         UIGameEnemy.Instance.Show();
         status = Status.idle;
         GameObjectPoolManager.Instance.Register("Stg_01", Resources.Load<GameObject>("Prefabs/Stg_01")
@@ -54,7 +46,7 @@ public class EnemyController : EnemyBase
         }
     }
 
-    public void UpdateHp(float damage)
+    public void UpdateHp(int damage)
     {
         enemy.Hp -= Mathf.Max(damage - enemy.Defense, 0);
     }

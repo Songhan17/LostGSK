@@ -12,7 +12,7 @@ public class DataManager : MonoSingleton<DataManager>
     public int Hp { get => playerSO.hp; set => playerSO.hp = value; }
     //[Header("当前生命值HP")]
     [HideInInspector]
-    public int CurrentHp { get => playerSO.currentHp; set => playerSO.currentHp = value; }
+    public int CurrentHp { get => Mathf.Max(playerSO.currentHp,0); set => playerSO.currentHp = value; }
     //[Header("蓝量MP")]
     [HideInInspector]
     public int Mp { get => playerSO.mp; set => playerSO.mp = value; }

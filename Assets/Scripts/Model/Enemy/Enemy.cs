@@ -7,19 +7,19 @@ public class Enemy
     public int ID { get; set; }
     public string Name { get; set; }
     public string Type { get; set; }
-    public float Hp { get; set; }
+    public int Hp { get; set; }
     /// <summary>
     /// 触碰伤害-f
     /// </summary>
-    public float TouchDamage { get; set; }
+    public int TouchDamage { get; set; }
     /// <summary>
     /// 标准伤害量-f
     /// </summary>
-    public float Damage { get; set; }
+    public int Damage { get; set; }
     /// <summary>
     /// 防御量-f
     /// </summary>
-    public float Defense { get; set; }
+    public int Defense { get; set; }
 
     public string Description { get; set; }
     //掉落对应skill ID序列
@@ -27,7 +27,7 @@ public class Enemy
     public string DropType { get; set; }
     public string AnimId { get; set; }
 
-    public Enemy(int iD, string name, string type, float hp, float touchDamage, float damage, float def, string des, int drop, string dType, string animId)
+    public Enemy(int iD, string name, string type, int hp, int touchDamage, int damage, int def, string des, int drop, string dType, string animId)
     {
         ID = iD;
         Name = name;

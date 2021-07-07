@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : PlayerBase
+public class PlayerController : MonoSingleton<PlayerController>
 {
 
     private bool facingRight = true;
@@ -16,6 +16,7 @@ public class PlayerController : PlayerBase
     private float jumpTimer;
     private float atkTimer;
     private float skillTimer;
+    private float invincibleTimer;
     private bool groundTouch;
     private bool isAtk;
     private bool isSkill;
@@ -75,7 +76,17 @@ public class PlayerController : PlayerBase
             rigidbody2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
-
+        Debug.Log(invincibleTimer);
+        if (invincibleTimer > 0)
+        {
+            invincibleTimer -= Time.deltaTime;
+            float remainder = invincibleTimer % 0.3f;
+            transform.GetComponent<SpriteRenderer>().enabled = remainder > 0.15f;
+        }
+        else
+        {
+            transform.GetComponent<SpriteRenderer>().enabled = true;
+        }
         if (jumpTimer > 0)
         {
             jumpTimer -= Time.deltaTime;
@@ -88,6 +99,7 @@ public class PlayerController : PlayerBase
         {
             skillTimer -= Time.deltaTime;
         }
+
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -250,7 +262,8 @@ public class PlayerController : PlayerBase
     {
         if (!canMove || isSlide)
             return;
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("atk") || animator.GetCurrentAnimatorStateInfo(0).IsName("spellcard") || isSit)
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("atk") || animator.GetCurrentAnimatorStateInfo(0).IsName("spellcard")
+            || isSit|| animator.GetCurrentAnimatorStateInfo(0).IsName("hitUpper"))
         {
             if (coll.onGround)
             {
@@ -279,7 +292,6 @@ public class PlayerController : PlayerBase
                 if (!isIdle)
                     return;
                 rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
-                Debug.Log("idle");
                 animator.Play("idle");
             }
 
@@ -342,6 +354,16 @@ public class PlayerController : PlayerBase
     public void Dead()
     {
         animator.SetTrigger("IsDead");
+    }
+
+    public void HitPlayer(int damage)
+    {
+        if (invincibleTimer<=0)
+        {
+            DataManager.Instance.CurrentHp -= Mathf.Max(damage - DataManager.Instance.Def, 0);
+            animator.Play("hitUpper");
+            invincibleTimer = 3f;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D target)

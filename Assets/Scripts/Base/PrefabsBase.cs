@@ -18,7 +18,6 @@ public class PrefabsBase : MonoBehaviour
     {
         if (target.CompareTag("Limit"))
         {
-            Debug.Log("Limit");
             DestroySelf();
         }
     }

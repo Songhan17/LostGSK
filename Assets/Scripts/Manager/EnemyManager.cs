@@ -30,10 +30,10 @@ public class EnemyManager : MonoSingleton<EnemyManager>
             int id = (int)(temp["id"].n);
             string name = temp["name"].str;
             string type = temp["type"].str;
-            float hp = temp["hp"].n;
-            float touchDamage = temp["touchDamage"].n;
-            float damage = temp["damage"].n;
-            float defense = temp["defense"].n;
+            int hp = (int)temp["hp"].n;
+            int touchDamage = (int)temp["touchDamage"].n;
+            int damage = (int)temp["damage"].n;
+            int defense = (int)temp["defense"].n;
             string description = temp["description"].str;
             int drop = (int)(temp["drop"].n);
             string dType = temp["dType"].str;
