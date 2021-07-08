@@ -28,11 +28,13 @@ public class CheckView : Conditional
 
     public SharedTransform Target;
     public SharedFloat Angle;
+    public SharedInt faceDir;
 
     public override TaskStatus OnUpdate()
     {
-        float tempAngle = Vector3.Angle(transform.forward, Target.Value.position - transform.position);
-        if (tempAngle < (Angle.Value / 2f))//目标和自身正前方的夹角小于视野范围的一般就认为在视野范围内
+        float tempAngle = Vector2.Angle(transform.position - Target.Value.position,
+            new Vector2(transform.localScale.x * faceDir.Value, 0));
+        if (tempAngle < (Angle.Value))//目标和自身正前方的夹角小于视野范围的一般就认为在视野范围内
         {
             return TaskStatus.Success;
         }
@@ -81,7 +83,8 @@ public class CheckOnLine : Conditional
             if (hitLeft.collider.tag == (string)PlayerTag.GetValue())//射线检测到目标
             {
                 RayHitPlayer.SetValue(true);
-                return TaskStatus.Success;
+                //return TaskStatus.Success;
+                return TaskStatus.Running;
             }
         }
         else if (hitRight.collider != null)
@@ -89,7 +92,8 @@ public class CheckOnLine : Conditional
             if (hitRight.collider.tag == (string)PlayerTag.GetValue())//射线检测到目标
             {
                 RayHitPlayer.SetValue(true);
-                return TaskStatus.Success;
+                //return TaskStatus.Success;
+                return TaskStatus.Running;
             }
         }
         else
@@ -108,15 +112,19 @@ public class CheckOnLine : Conditional
 public class MoveToTarget : Action
 {
     public SharedTransform Target;
+    public SharedFloat Distance;
+    public SharedInt faceDir;
 
     public override TaskStatus OnUpdate()
     {
+            transform.localScale = new Vector2(transform.position.x > Target.Value.position.x ?
+                faceDir.Value*1 : -1* faceDir.Value, 1);
+
         if (Vector3.Distance(transform.position, Target.Value.position) <= 1f)//表示已经移动到目标身边
         {
-            return TaskStatus.Success;
-
+            return TaskStatus.Running;
         }
-        else if (Vector3.Distance(transform.position, Target.Value.position) <= 10)//判断是目标的距离
+        else if (Vector3.Distance(transform.position, Target.Value.position) <= Distance.Value)//判断是目标的距离
         {
             transform.position = Vector3.MoveTowards(transform.position, Target.Value.position, 1.5f * Time.deltaTime);
         }

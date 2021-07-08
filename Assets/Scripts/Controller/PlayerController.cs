@@ -76,7 +76,6 @@ public class PlayerController : MonoSingleton<PlayerController>
             rigidbody2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
-        Debug.Log(invincibleTimer);
         if (invincibleTimer > 0)
         {
             invincibleTimer -= Time.deltaTime;

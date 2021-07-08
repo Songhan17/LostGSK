@@ -10,8 +10,8 @@ public class CubeViewDrawLine : MonoBehaviour
 
     private void Start()
     {
-        CreateLine(ref lineLeft, "LeftLine");
-        CreateLine(ref lineRight, "RightLine");
+        //CreateLine(ref lineLeft, "LeftLine");
+        //CreateLine(ref lineRight, "RightLine");
     }
 
     private void Update()
@@ -56,9 +56,9 @@ public class CubeViewDrawLine : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        //Gizmos.color = Color.red;
+        Gizmos.color = Color.red;
 
-        //Gizmos.DrawWireSphere((Vector2)transform.position, 10);
+        Gizmos.DrawWireSphere((Vector2)transform.position, 5);
 
     }
 
