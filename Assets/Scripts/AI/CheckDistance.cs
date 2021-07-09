@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
+using System.Collections;
 
 /// <summary>
 /// 创建检测距离的条件节点
@@ -114,19 +115,49 @@ public class MoveToTarget : Action
     public SharedTransform Target;
     public SharedFloat Distance;
     public SharedInt faceDir;
+    public SharedInt jumpForce;
+    public SharedVector2 bottomOffset;
+    public SharedFloat collisionRadius;
+    public LayerMask groundLayer;
+
+    private Rigidbody2D rd;
+    private bool onGround;
+    private bool isJump;
+    public override void OnStart()
+    {
+        base.OnStart();
+        rd = transform.GetComponent<Rigidbody2D>();
+    }
 
     public override TaskStatus OnUpdate()
     {
-            transform.localScale = new Vector2(transform.position.x > Target.Value.position.x ?
-                faceDir.Value*1 : -1* faceDir.Value, 1);
+        transform.localScale = new Vector2(transform.position.x > Target.Value.position.x ?
+            faceDir.Value * 1 : -1 * faceDir.Value, 1);
+        onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset.Value,
+                    collisionRadius.Value, groundLayer);
 
-        if (Vector3.Distance(transform.position, Target.Value.position) <= 1f)//表示已经移动到目标身边
+        if (Vector2.Distance(transform.position, Target.Value.position) <= 1f)//表示已经移动到目标身边
         {
-            return TaskStatus.Running;
+            return TaskStatus.Success;
         }
-        else if (Vector3.Distance(transform.position, Target.Value.position) <= Distance.Value)//判断是目标的距离
+        else if (Vector2.Distance(transform.position, Target.Value.position) <= Distance.Value)//判断是目标的距离
         {
-            transform.position = Vector3.MoveTowards(transform.position, Target.Value.position, 1.5f * Time.deltaTime);
+            if (onGround)
+            {
+                transform.position = Vector2.MoveTowards(transform.position,
+                new Vector2(Target.Value.position.x, transform.position.y), 1.5f * Time.deltaTime);
+                rd.velocity = new Vector2();
+            }
+
+            Ray2D ray = new Ray2D(transform.position, new Vector2(-transform.localScale.x * faceDir.Value, 0));
+            RaycastHit2D hitLeft = Physics2D.Raycast(ray.origin, ray.direction, 0.5f);
+            if (hitLeft.collider != null)
+            {
+                if (hitLeft.collider.CompareTag("Ground") && onGround && !isJump)//射线检测到目标
+                {
+                    StartCoroutine(Jump());
+                }
+            }
         }
         else//超过距离认为目标逃离，那么返回失败
         {
@@ -135,6 +166,19 @@ public class MoveToTarget : Action
 
         return TaskStatus.Running;
     }
+
+    IEnumerator Jump()
+    {
+        if (!isJump)
+        {
+            Debug.Log("jump");
+            rd.AddForce(new Vector2(-transform.localScale.x, 10) * jumpForce.Value);
+            isJump = true;
+            yield return new WaitForSeconds(0.2f);
+            isJump = false;
+        }
+    }
+
 }
 
 /// <summary>
@@ -146,16 +190,8 @@ public class LookAtTarget : Action
 
     public override TaskStatus OnUpdate()
     {
-        if (transform.position.x > Target.Value.position.x)//表示已经移动到目标身边
-        {
-            transform.localScale = new Vector2(1, 1);
-            return TaskStatus.Success;
-        }
-        else
-        {
-            transform.localScale = new Vector2(-1, 1);
-            return TaskStatus.Success;
-        }
+        transform.localScale = new Vector2(transform.position.x > Target.Value.position.x ? 1 : -1, 1);
+        return TaskStatus.Success;
     }
 }
 

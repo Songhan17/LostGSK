@@ -8,6 +8,16 @@ public class CubeViewDrawLine : MonoBehaviour
     private Vector3 leftLineEndPoint;
     private Vector3 rightLinEndPoint;
 
+    [Header("BottomCollision")]
+    public Vector2 bottomOffset;
+    [Header("Layers")]
+    public LayerMask groundLayer;
+
+    [Space]
+
+    public bool onGround;
+    [Header("Collision")]
+    public float collisionRadius = 0.25f;
     private void Start()
     {
         //CreateLine(ref lineLeft, "LeftLine");
@@ -22,6 +32,8 @@ public class CubeViewDrawLine : MonoBehaviour
 
         Debug.DrawRay(ray.origin, ray.direction * 5, Color.black);
         Debug.DrawRay(ray.origin, -ray.direction * 5, Color.blue);
+
+        onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
 
     }
 
@@ -59,6 +71,9 @@ public class CubeViewDrawLine : MonoBehaviour
         Gizmos.color = Color.red;
 
         Gizmos.DrawWireSphere((Vector2)transform.position, 5);
+
+
+        Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
 
     }
 

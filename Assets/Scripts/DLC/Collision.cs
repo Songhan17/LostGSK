@@ -82,13 +82,13 @@ public class Collision : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        //Gizmos.color = Color.red;
 
-        //var positions = new Vector2[] { bottomOffset, new Vector2(0,0), new Vector2(0, 0) };
+        ////var positions = new Vector2[] { bottomOffset, new Vector2(0,0), new Vector2(0, 0) };
 
-        Gizmos.DrawWireSphere((Vector2)transform.position  + bottomOffset, collisionRadius);
-        Gizmos.DrawWireSphere((Vector2)transform.position + leftBottom, collisionRadius);
-        Gizmos.DrawWireSphere((Vector2)transform.position + rightBottom, collisionRadius);
+        //Gizmos.DrawWireSphere((Vector2)transform.position  + bottomOffset, collisionRadius);
+        //Gizmos.DrawWireSphere((Vector2)transform.position + leftBottom, collisionRadius);
+        //Gizmos.DrawWireSphere((Vector2)transform.position + rightBottom, collisionRadius);
 
         //Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
         //Gizmos.DrawWireSphere((Vector2)transform.position + rightOffsetUp, collisionRadius);

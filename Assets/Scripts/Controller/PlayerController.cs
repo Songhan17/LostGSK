@@ -361,7 +361,7 @@ public class PlayerController : MonoSingleton<PlayerController>
         {
             DataManager.Instance.CurrentHp -= Mathf.Max(damage - DataManager.Instance.Def, 0);
             animator.Play("hitUpper");
-            invincibleTimer = 3f;
+            invincibleTimer = 1.5f;
         }
     }
 
