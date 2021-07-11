@@ -11,7 +11,7 @@ public class PrefabsBase : MonoBehaviour
     }
     protected virtual void Update()
     {
-        
+
     }
 
     protected void OnTriggerExit2D(Collider2D target)

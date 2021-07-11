@@ -56,13 +56,18 @@ public class PlayerController : MonoSingleton<PlayerController>
         isPause = false;
         GameObjectPoolManager.Instance.Register("蓄力_0", Resources.Load<GameObject>("Prefabs/蓄力_0")
             , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(5);
+        GameObjectPoolManager.Instance.Register("DamageText", Resources.Load<GameObject>("Prefabs/DamageText")
+            , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(10);
+        GameObjectPoolManager.Instance.Register("Red", Resources.Load<GameObject>("Prefabs/SkillType/Red")
+            , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(3);
         UIGamePlayerStatus.Instance.Show();
     }
 
 
     void Update()
     {
-
+        if (StateManager.Instance.GetState()!=GameState.Running)
+            return;
         isAtk = animator.GetCurrentAnimatorStateInfo(0).IsName("atk");
         isSkill = animator.GetCurrentAnimatorStateInfo(0).IsName("spellcard");
 
@@ -135,15 +140,6 @@ public class PlayerController : MonoSingleton<PlayerController>
             UIGameMenu.Instance.Show();
         }
 
-        if (UIGameMenu.Instance.IsShow)
-        {
-            isPause = true;
-        }
-        else
-        {
-            isPause = false;
-        }
-
         if (Input.GetKeyDown(KeyCode.P))
         {
             PlayerPrefs.DeleteAll();
@@ -153,7 +149,7 @@ public class PlayerController : MonoSingleton<PlayerController>
         {
             for (int i = 0; i < 15; i++)
             {
-                SkillController.Instance.GetSkill(Random.Range(1, 18), false);
+                SkillController.Instance.AddSkill(Random.Range(1, 18), false);
             }
         }
 
@@ -215,6 +211,8 @@ public class PlayerController : MonoSingleton<PlayerController>
 
     private void FixedUpdate()
     {
+        if (StateManager.Instance.GetState() != GameState.Running)
+            return;
         //读取方向输入
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
@@ -257,12 +255,12 @@ public class PlayerController : MonoSingleton<PlayerController>
         skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.localScale.x, 0) * 600);
     }
 
-    private void Walk(Vector2 dir, Vector2 dirRaw,bool isIdle)
+    private void Walk(Vector2 dir, Vector2 dirRaw, bool isIdle)
     {
         if (!canMove || isSlide)
             return;
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("atk") || animator.GetCurrentAnimatorStateInfo(0).IsName("spellcard")
-            || isSit|| animator.GetCurrentAnimatorStateInfo(0).IsName("hitUpper"))
+            || isSit || animator.GetCurrentAnimatorStateInfo(0).IsName("hitUpper"))
         {
             if (coll.onGround)
             {
@@ -352,12 +350,13 @@ public class PlayerController : MonoSingleton<PlayerController>
 
     public void Dead()
     {
+        rigidbody2d.velocity = new Vector2();
         animator.SetTrigger("IsDead");
     }
 
     public void HitPlayer(int damage)
     {
-        if (invincibleTimer<=0)
+        if (invincibleTimer <= 0)
         {
             DataManager.Instance.CurrentHp -= Mathf.Max(damage - DataManager.Instance.Def, 0);
             animator.Play("hitUpper");

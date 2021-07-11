@@ -17,7 +17,9 @@ public class CheckDistance : Conditional
         {
             return TaskStatus.Success;
         }
-        return TaskStatus.Running;
+
+
+        return TaskStatus.Failure;
     }
 }
 
@@ -30,6 +32,8 @@ public class CheckView : Conditional
     public SharedTransform Target;
     public SharedFloat Angle;
     public SharedInt faceDir;
+    public SharedFloat UnTime;
+    public SharedBool AtkStatus;
 
     public override TaskStatus OnUpdate()
     {
@@ -39,7 +43,23 @@ public class CheckView : Conditional
         {
             return TaskStatus.Success;
         }
-        return TaskStatus.Running;
+        else if (AtkStatus.Value)
+        {
+            if (UnTime.Value > 0 && AtkStatus.Value)
+            {
+                UnTime.Value -= Time.deltaTime;
+            }
+            if (UnTime.Value <= 0)
+            {
+                AtkStatus.Value = false;
+                return TaskStatus.Failure;
+            }
+            return TaskStatus.Success;
+        }
+        else
+        {
+            return TaskStatus.Failure;
+        }
     }
 }
 
@@ -114,6 +134,7 @@ public class MoveToTarget : Action
 {
     public SharedTransform Target;
     public SharedFloat Distance;
+    public SharedFloat TargetDistance;
     public SharedInt faceDir;
     public SharedInt jumpForce;
     public SharedVector2 bottomOffset;
@@ -131,12 +152,12 @@ public class MoveToTarget : Action
 
     public override TaskStatus OnUpdate()
     {
-        transform.localScale = new Vector2(transform.position.x > Target.Value.position.x ?
+        transform.localScale = new Vector2(transform.position.x > Target.Value.position.x + 0.1f ?
             faceDir.Value * 1 : -1 * faceDir.Value, 1);
         onGround = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset.Value,
                     collisionRadius.Value, groundLayer);
 
-        if (Vector2.Distance(transform.position, Target.Value.position) <= 1f)//表示已经移动到目标身边
+        if (Vector2.Distance(transform.position, Target.Value.position) <= TargetDistance.Value)//表示已经移动到目标身边
         {
             return TaskStatus.Success;
         }
@@ -145,7 +166,7 @@ public class MoveToTarget : Action
             if (onGround)
             {
                 transform.position = Vector2.MoveTowards(transform.position,
-                new Vector2(Target.Value.position.x, transform.position.y), 1.5f * Time.deltaTime);
+                new Vector2(Target.Value.position.x, transform.position.y), 2f * Time.deltaTime);
                 rd.velocity = new Vector2();
             }
 
@@ -198,39 +219,66 @@ public class LookAtTarget : Action
 /// <summary>
 /// 创建检测攻击距离的条件节点
 /// </summary>
-public class CheckAttackDistance : Conditional
+public class SetAtkStatus : Action
 {
-    public SharedTransform Target;
+    public SharedBool AtkStatus;
     public override TaskStatus OnUpdate()
     {
-        if (Vector3.Distance(transform.position, Target.Value.position) <= 1)
-        {
-            return TaskStatus.Success;
-        }
-        else
-        {
-            return TaskStatus.Failure;
-        }
+        AtkStatus.Value = true;
+        return TaskStatus.Success;
     }
 }
 
 /// <summary>
-/// 创建攻击目标的事件节点
+/// 两点巡逻
 /// </summary>
-public class AttackTarget : Action
+public class Patrol : Action
 {
-    public SharedTransform Target;
+    public SharedTransform TargetA;
+    public SharedTransform TargetB;
+    public SharedFloat WaitTime;
+    public SharedInt faceDir;
+
+    private bool move;
+    private bool back;
 
     public override TaskStatus OnUpdate()
     {
-        if (Target.Value.localScale.x <= 0.1f)
+        if (WaitTime.Value > 0)
         {
-            return TaskStatus.Success;
+            WaitTime.Value -= Time.deltaTime;
         }
-        else
+
+        if (Vector2.Distance(transform.position, TargetA.Value.position) <= 0.2f && !move)
         {
-            Target.Value.localScale -= Vector3.one * 0.2f * Time.deltaTime;
+            move = true;
+            back = false;
+            WaitTime.Value = 3f;
+        }
+
+        if (Vector2.Distance(transform.position, TargetB.Value.position) <= 0.2f && !back)
+        {
+            move = false;
+            back = true;
+            WaitTime.Value = 3f;
+        }
+        if (move && WaitTime.Value <= 0)
+        {
+            MoveToTarget(TargetB, -faceDir.Value);
+        }
+
+        if (back && WaitTime.Value <= 0)
+        {
+            MoveToTarget(TargetA, faceDir.Value);
         }
         return TaskStatus.Running;
     }
+
+    private void MoveToTarget(SharedTransform target, int face)
+    {
+        transform.localScale = new Vector2(face, 1);
+        transform.position = Vector2.MoveTowards(transform.position,
+                new Vector2(target.Value.position.x, transform.position.y), 1.5f * Time.deltaTime);
+    }
+
 }

@@ -66,7 +66,7 @@ public class SkillController : MonoSingleton<SkillController>
     }
 
     // 获得技能
-    public void GetSkill(int id,bool isEquip)
+    public void AddSkill(int id,bool isEquip)
     {
         Skill skill;
         if (skillDict.ContainsKey(id))
@@ -148,11 +148,11 @@ public class SkillController : MonoSingleton<SkillController>
             //Debug.Log(e);
             if (int.Parse(e) < 0)
             {
-                GetSkill(-int.Parse(e), true);
+                AddSkill(-int.Parse(e), true);
             }
             else
             {
-                GetSkill(int.Parse(e), false);
+                AddSkill(int.Parse(e), false);
             }
         });
 

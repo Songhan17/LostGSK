@@ -6,6 +6,7 @@ public class PlayerPrefabs : PrefabsBase
 {
     private Rigidbody2D rigidbody2d;
     private int waitTimer;
+    private bool addForce;
 
 
     private void Awake()
@@ -15,10 +16,11 @@ public class PlayerPrefabs : PrefabsBase
 
     private void OnTriggerEnter2D(Collider2D target)
     {
-        if (target.gameObject.CompareTag("Enemy"))
+        if (target.gameObject.CompareTag("Enemy") && !addForce)
         {
-            target.GetComponent<EnemyController>().UpdateHp(DataManager.Instance.Atk);
-            rigidbody2d.AddForce(new Vector2(transform.localScale.x, 0) * 550f);
+            target.GetComponent<EnemyBase>().UpdateHp(DataManager.Instance.Atk, target);
+            rigidbody2d.AddForce(new Vector2(-transform.localScale.x, 0) * 550f);
+            addForce = true;
             Invoke("DestroySelf", 0.7f);
         }
     }
@@ -30,12 +32,15 @@ public class PlayerPrefabs : PrefabsBase
             waitTimer++;
             if (waitTimer == 16)
             {
-                target.GetComponent<EnemyController>().UpdateHp(DataManager.Instance.Atk);
+                target.GetComponent<EnemyBase>().UpdateHp(DataManager.Instance.Atk, target);
                 waitTimer = 0;
             }
         }
     }
 
-
+    private void OnDisable()
+    {
+        addForce = false;
+    }
 
 }

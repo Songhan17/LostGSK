@@ -21,7 +21,7 @@ public class EnemyController : EnemyBase
     protected override void Update()
     {
         base.Update();
-        UIGameEnemy.Instance.Refresh(enemy);
+        //UIGameEnemy.Instance.Refresh(enemy);
         ChangeStatus();
         if (enemy.Hp == 1000)
         {
@@ -44,11 +44,6 @@ public class EnemyController : EnemyBase
         {
             status = Status.final_shape;
         }
-    }
-
-    public void UpdateHp(int damage)
-    {
-        enemy.Hp -= Mathf.Max(damage - enemy.Defense, 0);
     }
 
     private void ChangeStatus()

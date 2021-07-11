@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     {
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
+        StateManager.Instance.SetState(GameState.Running);
     }
 
     void Update()
