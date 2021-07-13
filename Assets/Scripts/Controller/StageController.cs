@@ -23,6 +23,11 @@ public class StageController : MonoSingleton<StageController>
         confiner.m_BoundingShape2D = CurrentScenes[door].mapCollider;
 
         StageParent.Find(door).gameObject.SetActive(true);
+        foreach (Transform item in StageParent.Find(door + "/enemies").transform)
+        {
+            item.gameObject.SetActive(true);
+        }
+        
         StageParent.Find(origin).gameObject.SetActive(false);
     }
 
@@ -69,7 +74,7 @@ public class StageController : MonoSingleton<StageController>
 
     IEnumerator Reset()
     {
-        yield  return new WaitForSeconds(1.5f);
+        yield  return new WaitForSeconds(1f);
         virtualCamera.m_Follow = PlayerController.Instance.transform;
         virtualCamera.m_Lens.OrthographicSize = 3.5f;
     }

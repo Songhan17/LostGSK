@@ -176,7 +176,7 @@ public class PlayerController : MonoSingleton<PlayerController>
         {
             if (isSit || isSlide)
                 return;
-            if (DataManager.Instance.RedSkill.Id != 1)
+            if (DataManager.Instance.RedSkill?.Id != 1)
             {
                 return;
             }

@@ -21,7 +21,7 @@ public class EnemyController : EnemyBase
     protected override void Update()
     {
         base.Update();
-        //UIGameEnemy.Instance.Refresh(enemy);
+        UIGameEnemy.Instance.Refresh(enemy);
         ChangeStatus();
         if (enemy.Hp == 1000)
         {

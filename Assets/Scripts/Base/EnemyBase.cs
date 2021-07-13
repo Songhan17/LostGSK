@@ -45,14 +45,14 @@ public class EnemyBase : MonoBehaviour
     {
         if (enemy.Hp <= 0)
         {
-            StageController.Instance.FocusView(transform);
             GetComponent<BehaviorTree>().enabled = false;
             timer += Time.deltaTime;
             transform.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1 - timer);
-            if (transform.GetComponent<SpriteRenderer>().color.a <= 0)
+            if (transform.GetComponent<SpriteRenderer>().color.a <= 0.5f)
             {
                 var go = GameObjectPoolManager.Instance.Get("Red");
                 go.transform.position = transform.GetChild(0).transform.position;
+                StageController.Instance.FocusView(go.transform);
                 gameObject.SetActive(false);
                 StateManager.Instance.SetState(GameState.Pause);
                 SkillController.Instance.AddSkill(enemy.Drop, false);
@@ -63,6 +63,8 @@ public class EnemyBase : MonoBehaviour
     {
         startPos = transform.position;
         GetComponent<BehaviorTree>().enabled = true;
+        timer = 0;
+        transform.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
     }
 
     private void OnDisable()

@@ -68,14 +68,17 @@ public class CheckView : Conditional
 /// </summary>
 public class CheckStatus : Conditional
 {
-
+    public SharedString CurrentStatus;
     public override TaskStatus OnUpdate()
     {
-        if (transform.GetComponent<EnemyController>().status == Status.combat)
+        if (transform.GetComponent<EnemyController>().status.ToString().Equals(CurrentStatus.Value))
         {
             return TaskStatus.Success;
         }
-        return TaskStatus.Running;
+        else
+        {
+            return TaskStatus.Failure;
+        }
     }
 }
 
@@ -104,8 +107,7 @@ public class CheckOnLine : Conditional
             if (hitLeft.collider.tag == (string)PlayerTag.GetValue())//射线检测到目标
             {
                 RayHitPlayer.SetValue(true);
-                //return TaskStatus.Success;
-                return TaskStatus.Running;
+                return TaskStatus.Success;
             }
         }
         else if (hitRight.collider != null)
@@ -113,8 +115,7 @@ public class CheckOnLine : Conditional
             if (hitRight.collider.tag == (string)PlayerTag.GetValue())//射线检测到目标
             {
                 RayHitPlayer.SetValue(true);
-                //return TaskStatus.Success;
-                return TaskStatus.Running;
+                return TaskStatus.Success;
             }
         }
         else

@@ -22,6 +22,7 @@ public class EnemyOrdinary : EnemyBase
         {
             return;
         }
+        transform.GetComponent<Rigidbody2D>().velocity = new Vector2();
         animator.Play("atk_black");
         coolTime = 3f;
     }
