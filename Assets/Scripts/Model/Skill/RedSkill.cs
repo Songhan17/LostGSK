@@ -13,8 +13,8 @@ public class RedSkill : Skill
     /// </summary>
     public string AnimId { get; set; }
 
-    public RedSkill(int id, string name, SkillType skillType, int amount, float consume,
-        float damage, float defense, string des, bool isEquip, float duration, string animId)
+    public RedSkill(int id, string name, SkillType skillType, int amount, int consume,
+        int damage, int defense, string des, bool isEquip, float duration, string animId)
         : base(id, name, skillType, amount, consume, damage, defense, des,isEquip)
     {
         Duration = duration;

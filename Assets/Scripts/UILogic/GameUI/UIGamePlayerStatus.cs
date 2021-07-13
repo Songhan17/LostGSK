@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "UI/Status/Hp",EnableUpdate =true,IsPreBind =false)]
+[JuiPanel(UiPath = "UI/Status",EnableUpdate =true,IsPreBind =false)]
 public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
 {
-    private Slider red;
-    private Text text;
+    private Slider red,blue;
+    private Text redText,blueText;
 
     protected override void OnCreate()
     {
         base.OnCreate();
-        red = transform.Find("red").GetComponent<Slider>();
-        text = transform.Find("hp").GetComponent<Text>();
+        red = transform.Find("Hp/red").GetComponent<Slider>();
+        redText = transform.Find("Hp/hp").GetComponent<Text>();
+        blue = transform.Find("Mp/blue").GetComponent<Slider>();
+        blueText = transform.Find("Mp/mp").GetComponent<Text>();
         SetMax();
     }
 
@@ -26,12 +28,15 @@ public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
     {
         base.OnUpdate();
         red.value = DataManager.Instance.CurrentHp;
-        text.text = red.value.ToString();
+        redText.text = red.value.ToString();
+        blue.value = DataManager.Instance.CurrentMp;
+        blueText.text = blue.value.ToString();
     }
 
     public void SetMax()
     {
         red.maxValue = DataManager.Instance.Hp;
+        blue.maxValue = DataManager.Instance.Mp;
     }
 
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath ="UI",IsPreBind =false)]
+[JuiPanel(UiPath = "UI/EnemyHp", IsPreBind =false)]
 public class UIGameEnemy : JuiSingletonExtension<UIGameEnemy>
 {
     private Text text;
@@ -11,7 +11,7 @@ public class UIGameEnemy : JuiSingletonExtension<UIGameEnemy>
     protected override void OnCreate()
     {
         base.OnCreate();
-        text = transform.Find("EnemyHp").GetComponent<Text>();
+        text = transform.GetComponent<Text>();
     }
 
     protected override void OnShow()

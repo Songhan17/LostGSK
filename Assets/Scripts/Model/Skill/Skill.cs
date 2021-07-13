@@ -13,15 +13,15 @@ public class Skill
     /// <summary>
     /// 消耗量-f
     /// </summary>
-    public float Consume { get; set; }
+    public int Consume { get; set; }
     /// <summary>
     /// 伤害量-f
     /// </summary>
-    public float Damage { get; set; }
+    public int Damage { get; set; }
     /// <summary>
     /// 防御量-f
     /// </summary>
-    public float Defense { get; set; }
+    public int Defense { get; set; }
 
     public string Description { get; set; }
 
@@ -32,8 +32,8 @@ public class Skill
 
     public Skill() { Id = -1; }
 
-    public Skill(int id, string name, SkillType type, int amount, float consume,
-        float damage, float def, string des, bool isEquip)
+    public Skill(int id, string name, SkillType type, int amount, int consume,
+        int damage, int def, string des, bool isEquip)
     {
         Id = id;
         Name = name;

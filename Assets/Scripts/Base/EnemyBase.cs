@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using BehaviorDesigner.Runtime;
+using UnityEngine;
 
 public class EnemyBase : MonoBehaviour
 {
     protected Enemy enemy;
     protected Animator animator;
+    protected Vector2 startPos;
 
     private float invincibleTimer;
     private float timer = 0;
@@ -32,15 +34,10 @@ public class EnemyBase : MonoBehaviour
 
     public void UpdateHp(int damage)
     {
-        enemy.Hp -= Mathf.Max(damage - enemy.Defense, 1);
-    }
-
-    public void UpdateHp(int damage, Collider2D target)
-    {
         var text = GameObjectPoolManager.Instance.Get("DamageText");
         text.GetComponentInChildren<HudPrefab>().HUD(DataManager.Instance.Atk - enemy.Defense);
         text.transform.position = transform.position;
-        text.transform.localScale = new Vector2(target.transform.localScale.x, 1);
+        text.transform.localScale = new Vector2(1, 1);
         enemy.Hp -= Mathf.Max(damage - enemy.Defense, 1);
     }
 
@@ -48,23 +45,37 @@ public class EnemyBase : MonoBehaviour
     {
         if (enemy.Hp <= 0)
         {
+            StageController.Instance.FocusView(transform);
+            GetComponent<BehaviorTree>().enabled = false;
             timer += Time.deltaTime;
             transform.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1 - timer);
             if (transform.GetComponent<SpriteRenderer>().color.a <= 0)
             {
                 var go = GameObjectPoolManager.Instance.Get("Red");
                 go.transform.position = transform.GetChild(0).transform.position;
-                Destroy(gameObject);
+                gameObject.SetActive(false);
                 StateManager.Instance.SetState(GameState.Pause);
                 SkillController.Instance.AddSkill(enemy.Drop, false);
             }
         }
     }
+    private void OnEnable()
+    {
+        startPos = transform.position;
+        GetComponent<BehaviorTree>().enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        transform.position = startPos;
+        enemy = EnemyManager.Instance.GetEnemyById(id);
+    }
+
     protected virtual void OnTriggerEnter2D(Collider2D target)
     {
         if (target.CompareTag("AtkRange") && invincibleTimer <= 0)
         {
-            UpdateHp(DataManager.Instance.Atk, target);
+            UpdateHp(DataManager.Instance.Atk);
             invincibleTimer = 0.5f;
         }
     }

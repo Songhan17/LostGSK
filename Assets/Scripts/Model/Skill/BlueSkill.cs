@@ -10,8 +10,8 @@ public class BlueSkill : Skill
     /// </summary>
     public float Restore { get; set; }
 
-    public BlueSkill(int id, string name, SkillType skillType, int amount, float consume,
-        float damage, float def, string des,bool isEquip, string animId, float restore)
+    public BlueSkill(int id, string name, SkillType skillType, int amount, int consume,
+        int damage, int def, string des,bool isEquip, string animId, float restore)
         : base(id, name, skillType, amount, consume, damage, def, des,isEquip)
     {
         AnimId = animId;

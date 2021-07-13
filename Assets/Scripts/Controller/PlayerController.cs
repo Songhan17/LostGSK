@@ -12,11 +12,11 @@ public class PlayerController : MonoSingleton<PlayerController>
     private GameObject skillGameObject;
 
     private Rigidbody2D rigidbody2d;
-    private bool isPause;
     private float jumpTimer;
     private float atkTimer;
     private float skillTimer;
     private float invincibleTimer;
+    private int targetMp;
     private bool groundTouch;
     private bool isAtk;
     private bool isSkill;
@@ -24,6 +24,7 @@ public class PlayerController : MonoSingleton<PlayerController>
     private bool isSlide;
     private bool isJump;
     private bool isIdle;
+    private bool isConsume;
 
     [Space]
     [Header("Stats")]
@@ -53,7 +54,6 @@ public class PlayerController : MonoSingleton<PlayerController>
     }
     void Start()
     {
-        isPause = false;
         GameObjectPoolManager.Instance.Register("蓄力_0", Resources.Load<GameObject>("Prefabs/蓄力_0")
             , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(5);
         GameObjectPoolManager.Instance.Register("DamageText", Resources.Load<GameObject>("Prefabs/DamageText")
@@ -66,8 +66,16 @@ public class PlayerController : MonoSingleton<PlayerController>
 
     void Update()
     {
-        if (StateManager.Instance.GetState()!=GameState.Running)
+        if (StateManager.Instance.GetState() != GameState.Running)
+        {
+            animator.speed = 0;
+            rigidbody2d.velocity = new Vector2();
             return;
+        }
+        else
+        {
+            animator.speed = 1;
+        }
         isAtk = animator.GetCurrentAnimatorStateInfo(0).IsName("atk");
         isSkill = animator.GetCurrentAnimatorStateInfo(0).IsName("spellcard");
 
@@ -109,6 +117,10 @@ public class PlayerController : MonoSingleton<PlayerController>
         {
             if (isSit)
             {
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("slideShovel"))
+                {
+                    return;
+                }
                 animator.Play("slideShovel");
                 isSlide = true;
                 return;
@@ -168,9 +180,24 @@ public class PlayerController : MonoSingleton<PlayerController>
             {
                 return;
             }
+            if (DataManager.Instance.CurrentMp< DataManager.Instance.RedSkill.Consume)
+            {
+                return;
+            }
+            targetMp = DataManager.Instance.CurrentMp - DataManager.Instance.RedSkill.Consume;
             skillTimer = 0.5f;
             animator.Play("spellcard");
             StartCoroutine(PlayerSkill());
+        }
+
+        if (isConsume)
+        {
+            DataManager.Instance.CurrentMp -= 1;
+            if (DataManager.Instance.CurrentMp<= targetMp)
+            {
+                DataManager.Instance.CurrentMp = targetMp;
+                isConsume = false;
+            }
         }
 
         if (Input.GetKey(KeyCode.S))
@@ -249,9 +276,10 @@ public class PlayerController : MonoSingleton<PlayerController>
     IEnumerator PlayerSkill()
     {
         yield return new WaitForSeconds(0.3f);
+        isConsume = true;
         skillGameObject = GameObjectPoolManager.Instance.Get("蓄力_0");
         skillGameObject.transform.position = transform.Find("Skill").transform.position;
-        skillGameObject.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
+        skillGameObject.transform.localScale = new Vector2(transform.localScale.x, 1);
         skillGameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.localScale.x, 0) * 600);
     }
 
@@ -366,15 +394,17 @@ public class PlayerController : MonoSingleton<PlayerController>
 
     private void OnTriggerEnter2D(Collider2D target)
     {
-        if (target.gameObject.name == "door1-2")
+        if (target.CompareTag("Door"))
         {
-            var pos = StageController.Instance.ChangeStage(2);
-            transform.position = new Vector2(pos.x + 1f, pos.y);
-        }
-        if (target.gameObject.name == "door1-1")
-        {
-            var pos = StageController.Instance.ChangeStage(1);
-            transform.position = new Vector2(pos.x - 0.5f, pos.y);
+            var current = StageController.Instance.GetCurrentStage();
+            current.door.ForEach(e =>
+            {
+                if (target.gameObject.name == e.name)
+                {
+                    StageController.Instance.ChangeStage(e.name, current.name);
+                    transform.position = e.position;
+                }
+            });
         }
     }
 

@@ -35,9 +35,9 @@ public class SkillManager : MonoSingleton<SkillManager>
             int id = (int)(temp["id"].n);
             string name = temp["name"].str;
             int amount = (int)(temp["amount"].n);
-            float consume = (temp["consume"].n);
-            float damage = (temp["damage"].n);
-            float defense = (temp["defense"].n);
+            int consume = (int)(temp["consume"].n);
+            int damage = (int)(temp["damage"].n);
+            int defense = (int)(temp["defense"].n);
             string description = temp["description"].str;
 
             Skill skill = null;

@@ -55,7 +55,10 @@ public class EnemyManager : MonoSingleton<EnemyManager>
         {
             if (enemy.ID == id)
             {
-                return enemy;
+                Enemy target = new Enemy(enemy.ID, enemy.Name, enemy.Type, enemy.Hp,
+               enemy.TouchDamage, enemy.Damage, enemy.Defense, enemy.Description,
+               enemy.Drop, enemy.DropType, enemy.AnimId);
+                return target;
             }
         }
         return null;

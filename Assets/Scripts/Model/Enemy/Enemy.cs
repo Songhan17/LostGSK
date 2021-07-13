@@ -41,4 +41,8 @@ public class Enemy
         DropType = dType;
         AnimId = animId;
     }
+
+    public Enemy()
+    {
+    }
 }
