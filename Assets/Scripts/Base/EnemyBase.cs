@@ -52,9 +52,10 @@ public class EnemyBase : MonoBehaviour
             {
                 var go = GameObjectPoolManager.Instance.Get("Red");
                 go.transform.position = transform.GetChild(0).transform.position;
+                go.SendMessage("SetSkill", SkillController.Instance.GetSkillById(enemy.Drop));
                 StageController.Instance.FocusView(go.transform);
                 gameObject.SetActive(false);
-                StateManager.Instance.SetState(GameState.Pause);
+                StateManager.Instance.SetState(GameState.InAnim);
                 SkillController.Instance.AddSkill(enemy.Drop, false);
             }
         }

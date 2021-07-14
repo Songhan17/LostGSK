@@ -6,13 +6,15 @@ public class DataManager : MonoSingleton<DataManager>
 {
 
     public Player_SO playerSO;
+    public PlayerTemplate_SO template_SO;
 
     //[Header("生命值HP")]
     [HideInInspector]
     public int Hp { get => playerSO.hp; set => playerSO.hp = value; }
     //[Header("当前生命值HP")]
     [HideInInspector]
-    public int CurrentHp {
+    public int CurrentHp
+    {
         get => Mathf.Max(playerSO.currentHp, 0);
         set => playerSO.currentHp = Mathf.Clamp(value, 0, 1000);
     }
@@ -51,6 +53,12 @@ public class DataManager : MonoSingleton<DataManager>
     {
         return "生命：" + CurrentHp + "/" + Hp + ";" + "能量：" + CurrentMp + "/" + Mp + ";" + "攻击：" + Atk + ";"
             + "防御：" + Def + ";" + "移动速度：" + Spe + ";" + "幸运值：" + Lck + ";" + "恢复速率/s：" + Restore;
+    }
+
+    private void OnEnable()
+    {
+        playerSO = new Player_SO(template_SO.hp, template_SO.currentHp, template_SO.mp, template_SO.currentMp,
+            template_SO.atk, template_SO.def, template_SO.spe, template_SO.lck, template_SO.restore, template_SO.money);
     }
 
 }

@@ -35,7 +35,6 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
     {
         base.OnShow();
         StateManager.Instance.SetState(GameState.Menu);
-        Time.timeScale = 0;
         EventSystemManager.Instance.SetCurrentGameObject(PlayerPanel.gameObject);
         EventSystemManager.Instance.lastGameObject = PlayerPanel.gameObject;
         PlayerController.Instance.enabled = false;
@@ -45,7 +44,6 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
     {
         base.OnHide();
         StateManager.Instance.SetState(GameState.Running);
-        Time.timeScale = 1;
         EventSystemManager.Instance.lastGameObject = null;
         SkillController.Instance.Save();
         PlayerController.Instance.enabled = true;

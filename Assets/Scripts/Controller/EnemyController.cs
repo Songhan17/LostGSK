@@ -70,6 +70,7 @@ public class EnemyController : EnemyBase
 
     public void Shoot()
     {
+        transform.localScale = new Vector2(transform.position.x > PlayerController.Instance.transform.position.x ? 1 : -1, 1);
         shootGO = GameObjectPoolManager.Instance.Get("Shoot_1");
         shootGO.transform.position = transform.Find("Shoot").transform.position;
         shootGO.transform.localScale = transform.localScale;
@@ -78,6 +79,7 @@ public class EnemyController : EnemyBase
 
     public void ShootDIY(float euler, float offsetY, int max)
     {
+        transform.localScale = new Vector2(transform.position.x > PlayerController.Instance.transform.position.x ? 1 : -1, 1);
         StartCoroutine(DoShootDIY(euler, offsetY, max));
     }
 

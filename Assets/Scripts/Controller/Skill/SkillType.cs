@@ -5,6 +5,8 @@ using UnityEngine;
 public class SkillType : MonoBehaviour
 {
     private bool Move;
+
+    private Skill skill;
     private void Start()
     {
         Invoke("MoveToPlayer", 0.3f);
@@ -22,6 +24,8 @@ public class SkillType : MonoBehaviour
             if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) <= 0.2f)
             {
                 GameObjectPoolManager.Instance.Recycle(gameObject);
+                UIDialogSkill.Instance.Refresh(skill);
+                UIDialogSkill.Instance.Show();
             }
         }
     }
@@ -30,6 +34,11 @@ public class SkillType : MonoBehaviour
     {
         Move = true;
         StateManager.Instance.SetState(GameState.Running);
+    }
+
+    public void SetSkill(Skill skill)
+    {
+        this.skill = skill;
     }
 
 }

@@ -14,13 +14,32 @@ public class StateManager : MonoSingleton<StateManager>
     public void SetState(GameState state)
     {
         this.state = state;
-        if (this.state == GameState.Running)
+
+        switch (this.state)
         {
-            InvokeRepeating("Restore", 1, 1);
-        }
-        else
-        {
-            CancelInvoke("Restore");
+            case GameState.Running:
+                InvokeRepeating("Restore", 1, 1);
+                Time.timeScale = 1;
+                break;
+            case GameState.Menu:
+                CancelInvoke("Restore");
+                Time.timeScale = 0;
+                break;
+            case GameState.Pause:
+                CancelInvoke("Restore");
+                Time.timeScale = 0;
+                break;
+            case GameState.Stop:
+                CancelInvoke("Restore");
+                Time.timeScale = 0;
+                break;
+            case GameState.InAnim:
+                CancelInvoke("Restore");
+                break;
+            case GameState.Context:
+                CancelInvoke("Restore");
+                Time.timeScale = 0;
+                break;
         }
     }
 

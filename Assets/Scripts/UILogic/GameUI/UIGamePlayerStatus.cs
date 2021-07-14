@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "UI/Status",EnableUpdate =true,IsPreBind =false)]
+[JuiPanel(UiPath = "UI/Status",EnableUpdate =true)]
 public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
 {
     private Slider red,blue;
@@ -18,6 +18,7 @@ public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
         blueText = transform.Find("Mp/mp").GetComponent<Text>();
         SetMax();
     }
+
 
     protected override void OnShow()
     {
@@ -39,4 +40,5 @@ public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
         blue.maxValue = DataManager.Instance.Mp;
     }
 
+    
 }

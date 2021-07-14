@@ -380,6 +380,13 @@ public class PlayerController : MonoSingleton<PlayerController>
     {
         rigidbody2d.velocity = new Vector2();
         animator.SetTrigger("IsDead");
+        Invoke("ShowGameOver", 2f);
+    }
+
+    private void ShowGameOver()
+    {
+        StateManager.Instance.SetState(GameState.Stop);
+        UIDialogGame.Instance.Show();
     }
 
     public void HitPlayer(int damage)

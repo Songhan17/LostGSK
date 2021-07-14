@@ -4,23 +4,28 @@
 public class PlayerTemplate_SO : ScriptableObject
 {
     [Header("生命值HP")]
-    public float hp;
+    [Range(0, 1000)]
+    public int hp;
     [Header("当前生命值HP")]
-    public float currentHp;
+    [Range(0, 1000)]
+    public int currentHp;
     [Header("蓝量MP")]
-    public float mp;
+    [Range(0, 1000)]
+    public int mp;
     [Header("当前蓝量MP")]
-    public float currentMp;
+    [Range(0, 1000)]
+    public int currentMp;
     [Header("攻击力ATK")]
-    public float atk;
+    public int atk;
     [Header("防御力DEF")]
-    public float def;
+    public int def;
     [Header("移动速度SPE")]
-    public float spe;
+    public int spe;
     [Header("幸运值LCK")]
-    public float lck;
+    public int lck;
     [Header("恢复速率-mp")]
     public float restore;
     [Header("符卡值")]
-    public float money;
+    public int money;
+
 }

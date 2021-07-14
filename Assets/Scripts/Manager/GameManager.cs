@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
     void Start()
     {
@@ -13,11 +13,19 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            LoadMain();
+        }
+    }
 
     public void LoadMain()
     {
         GameObjectPoolManager.Instance.DeleteAll();
         SceneManager.LoadScene(0);
+        StateManager.Instance.SetState(GameState.Running);
     }
 
 }
