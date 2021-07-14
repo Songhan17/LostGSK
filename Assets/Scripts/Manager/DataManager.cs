@@ -12,13 +12,16 @@ public class DataManager : MonoSingleton<DataManager>
     public int Hp { get => playerSO.hp; set => playerSO.hp = value; }
     //[Header("当前生命值HP")]
     [HideInInspector]
-    public int CurrentHp { get => Mathf.Max(playerSO.currentHp,0); set => playerSO.currentHp = value; }
+    public int CurrentHp {
+        get => Mathf.Max(playerSO.currentHp, 0);
+        set => playerSO.currentHp = Mathf.Clamp(value, 0, 1000);
+    }
     //[Header("蓝量MP")]
     [HideInInspector]
     public int Mp { get => playerSO.mp; set => playerSO.mp = value; }
     //[Header("当前蓝量MP")]
     [HideInInspector]
-    public int CurrentMp { get => playerSO.currentMp; set => playerSO.currentMp = value; }
+    public int CurrentMp { get => playerSO.currentMp; set => playerSO.currentMp = Mathf.Clamp(value, 0, 1000); }
     //[Header("攻击力ATK")]
     [HideInInspector]
     public int Atk { get => playerSO.atk; set => playerSO.atk = value; }
@@ -46,7 +49,7 @@ public class DataManager : MonoSingleton<DataManager>
 
     public override string ToString()
     {
-        return "生命：" + CurrentHp+ "/"+ Hp + ";" + "能量：" +CurrentMp +"/"+ Mp + ";" + "攻击：" + Atk + ";"
+        return "生命：" + CurrentHp + "/" + Hp + ";" + "能量：" + CurrentMp + "/" + Mp + ";" + "攻击：" + Atk + ";"
             + "防御：" + Def + ";" + "移动速度：" + Spe + ";" + "幸运值：" + Lck + ";" + "恢复速率/s：" + Restore;
     }
 

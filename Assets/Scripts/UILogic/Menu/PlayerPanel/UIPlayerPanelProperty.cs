@@ -22,6 +22,13 @@ public class UIPlayerPanelProperty : JuiSingletonExtension<UIPlayerPanelProperty
     {
         base.OnUpdate();
         EventSystemManager.Instance.SetCurrentGameObject(transform.parent.gameObject);
+        if (IsFocus)
+        {
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                Hide();
+            }
+        }
     }
 
     public void Refresh(string target)

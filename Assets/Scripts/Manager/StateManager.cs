@@ -14,6 +14,19 @@ public class StateManager : MonoSingleton<StateManager>
     public void SetState(GameState state)
     {
         this.state = state;
+        if (this.state == GameState.Running)
+        {
+            InvokeRepeating("Restore", 1, 1);
+        }
+        else
+        {
+            CancelInvoke("Restore");
+        }
+    }
+
+    public void Restore()
+    {
+        DataManager.Instance.CurrentMp += (int)DataManager.Instance.Restore;
     }
 
 }

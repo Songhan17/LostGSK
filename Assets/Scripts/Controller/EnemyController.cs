@@ -25,7 +25,7 @@ public class EnemyController : EnemyBase
         ChangeStatus();
         if (enemy.Hp == 1000)
         {
-           
+
         }
         else if (enemy.Hp > 960)
         {
@@ -40,7 +40,7 @@ public class EnemyController : EnemyBase
             animator.speed = 1;
             status = Status.start;
         }
-        else if (enemy.Hp > 0 && enemy.Hp<=400)
+        else if (enemy.Hp > 0 && enemy.Hp <= 400)
         {
             status = Status.final_shape;
         }
@@ -72,7 +72,27 @@ public class EnemyController : EnemyBase
     {
         shootGO = GameObjectPoolManager.Instance.Get("Shoot_1");
         shootGO.transform.position = transform.Find("Shoot").transform.position;
+        shootGO.transform.localScale = transform.localScale;
         shootGO.transform.SetParent(transform.Find("Shoot").transform);
+    }
+
+    public void ShootDIY(float euler, float offsetY, int max)
+    {
+        StartCoroutine(DoShootDIY(euler, offsetY, max));
+    }
+
+    IEnumerator DoShootDIY(float euler, float offsetY, int max)
+    {
+        var temp = transform.Find("Shoot").transform;
+        for (int i = 0; i < max; i++)
+        {
+            shootGO = GameObjectPoolManager.Instance.Get("Shoot_1");
+            shootGO.transform.position = new Vector2(temp.position.x - ((i + 1) * 2), temp.position.y + offsetY);
+            shootGO.transform.localScale = transform.localScale;
+            shootGO.transform.localEulerAngles = new Vector3(0, 0, euler);
+            shootGO.transform.SetParent(temp);
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     public void Stg_01()
@@ -115,5 +135,5 @@ public class EnemyController : EnemyBase
 }
 public enum Status
 {
-    idle,start,combat, final_shape
+    idle, start, combat, final_shape
 }

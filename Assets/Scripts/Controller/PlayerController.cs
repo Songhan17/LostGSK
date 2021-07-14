@@ -392,6 +392,8 @@ public class PlayerController : MonoSingleton<PlayerController>
         }
     }
 
+
+
     private void OnTriggerEnter2D(Collider2D target)
     {
         if (target.CompareTag("Door"))
@@ -410,7 +412,7 @@ public class PlayerController : MonoSingleton<PlayerController>
 
     private void OnTriggerStay2D(Collider2D target)
     {
-        if (target.gameObject.layer == 9)
+        if (target.gameObject.layer == 9&& !coll.onGround)
         {
             isIdle = false;
         }

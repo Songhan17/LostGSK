@@ -27,4 +27,9 @@ public class PrefabsBase : MonoBehaviour
         GameObjectPoolManager.Instance.Recycle(gameObject);
     }
 
+    private void OnDisable()
+    {
+        transform.localEulerAngles = new Vector3();
+    }
+
 }

@@ -68,10 +68,10 @@ public class CheckView : Conditional
 /// </summary>
 public class CheckStatus : Conditional
 {
-    public SharedString CurrentStatus;
+    public Status CurrentStatus;
     public override TaskStatus OnUpdate()
     {
-        if (transform.GetComponent<EnemyController>().status.ToString().Equals(CurrentStatus.Value))
+        if (transform.GetComponent<EnemyController>().status.Equals(CurrentStatus))
         {
             return TaskStatus.Success;
         }

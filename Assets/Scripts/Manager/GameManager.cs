@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,10 +10,14 @@ public class GameManager : MonoBehaviour
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
         StateManager.Instance.SetState(GameState.Running);
+
     }
 
-    void Update()
+
+    public void LoadMain()
     {
-        
+        GameObjectPoolManager.Instance.DeleteAll();
+        SceneManager.LoadScene(0);
     }
+
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   hp: 100
   currentHp: 230
   mp: 1000
-  currentMp: 476
+  currentMp: 3
   atk: 5
   def: 0
   spe: 5

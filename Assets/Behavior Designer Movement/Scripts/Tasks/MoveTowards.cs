@@ -19,6 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat maxLookAtRotationDelta;
         [Tooltip("The transform that the agent is moving towards")]
         public SharedTransform targetTransform;
+        public SharedTransform targetLook;
         [Tooltip("If target is null then use the target position")]
         public SharedVector3 targetPosition;
         
@@ -40,7 +41,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             // We haven't reached the target yet so keep moving towards it
             transform.position = Vector3.MoveTowards(transform.position, position, speed.Value * Time.deltaTime);
             if (lookAtTarget.Value) {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(position - transform.position), maxLookAtRotationDelta.Value);
+                //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(position - transform.position), maxLookAtRotationDelta.Value);
+                transform.localScale = new Vector2(transform.position.x > targetLook.Value.position.x ? 1 : -1, 1);
             }
             return TaskStatus.Running;
         }
