@@ -24,6 +24,7 @@ public class GameManager : MonoSingleton<GameManager>
     public void LoadMain()
     {
         GameObjectPoolManager.Instance.DeleteAll();
+        StateManager.Instance.SetState(GameState.Stop);
         SceneManager.LoadScene(0);
     }
 

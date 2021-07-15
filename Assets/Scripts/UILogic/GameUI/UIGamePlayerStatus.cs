@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "UI/Status",EnableUpdate =true)]
+[JuiPanel(UiPath = "UI/Status",EnableUpdate =true,IsPreBind =true)]
 public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
 {
     private Slider red,blue;

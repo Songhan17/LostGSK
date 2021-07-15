@@ -51,6 +51,7 @@ public class StageController : MonoSingleton<StageController>
             }
             CurrentScenes.Add(e, stages);
         });
+        GetCurrentStage();
     }
 
     public Stage GetCurrentStage()
@@ -58,6 +59,7 @@ public class StageController : MonoSingleton<StageController>
         Debug.Log(CurrentScenes.Count);
         foreach (Stage item in CurrentScenes.Values.ToList())
         {
+            Debug.Log(confiner.m_BoundingShape2D == item.mapCollider);
             if (confiner.m_BoundingShape2D == item.mapCollider)
             {
                 return CurrentScenes[item.name];

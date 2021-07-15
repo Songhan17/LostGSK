@@ -15,7 +15,7 @@ public class MonoSingleton<T> : MonoBehaviour, IDisposable where T : MonoSinglet
                     GameObject go = new GameObject(typeof(T).Name);
                     mInstance = go.AddComponent<T>();
 
-                    Debug.LogWarning("New MonoSingleton " + typeof(T));
+                    //Debug.LogWarning("New MonoSingleton " + typeof(T));
 
                     GameObject parent = GameObject.Find("__System");
                     if (parent == null)
@@ -25,7 +25,10 @@ public class MonoSingleton<T> : MonoBehaviour, IDisposable where T : MonoSinglet
                     }
                     go.transform.parent = parent.transform;
                 }
-                DontDestroyOnLoad(mInstance.gameObject);
+                if (mInstance.gameObject.name != "GameManager")
+                {
+                    DontDestroyOnLoad(mInstance.gameObject);
+                }
             }
             return mInstance;
         }

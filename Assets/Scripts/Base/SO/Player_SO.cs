@@ -30,17 +30,4 @@ public class Player_SO : ScriptableObject
     [Header("符卡值")]
     public int money;
 
-    public Player_SO(int hp, int currentHp, int mp, int currentMp, int atk, int def, int spe, int lck, float restore, int money)
-    {
-        this.hp = hp;
-        this.currentHp = currentHp;
-        this.mp = mp;
-        this.currentMp = currentMp;
-        this.atk = atk;
-        this.def = def;
-        this.spe = spe;
-        this.lck = lck;
-        this.restore = restore;
-        this.money = money;
-    }
 }

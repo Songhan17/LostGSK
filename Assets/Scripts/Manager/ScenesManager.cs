@@ -12,6 +12,7 @@ public class ScenesManager : MonoSingleton<ScenesManager>
         currentStage.Add("Stage1-1");
         currentStage.Add("Stage1-2");
         StageController.Instance.LoadStage(currentStage);
+        DataManager.Instance.InitData();
     }
 
 }

@@ -6,6 +6,7 @@ public class DataManager : MonoSingleton<DataManager>
 {
 
     public Player_SO playerSO;
+
     public PlayerTemplate_SO template_SO;
 
     //[Header("生命值HP")]
@@ -22,7 +23,7 @@ public class DataManager : MonoSingleton<DataManager>
     public int Mp { get => playerSO.mp; set => playerSO.mp = value; }
     //[Header("当前蓝量MP")]
     [HideInInspector]
-    public int CurrentMp { get => playerSO.currentMp; set => playerSO.currentMp = Mathf.Clamp(value, 0, 1000); }
+    public int CurrentMp { get => playerSO.currentMp; set => playerSO.currentMp = Mathf.Clamp(value, 0, Mp); }
     //[Header("攻击力ATK")]
     [HideInInspector]
     public int Atk { get => playerSO.atk; set => playerSO.atk = value; }
@@ -47,18 +48,18 @@ public class DataManager : MonoSingleton<DataManager>
     public YellowSkill YellowSkill { get => (YellowSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.Yellow); }
     public WhiteSkill WhiteSkill { get => (WhiteSkill)SkillController.Instance.GetSkillEquip(Skill.SkillType.White); }
 
-
     public override string ToString()
     {
         return "生命：" + CurrentHp + "/" + Hp + ";" + "能量：" + CurrentMp + "/" + Mp + ";" + "攻击：" + Atk + ";"
             + "防御：" + Def + ";" + "移动速度：" + Spe + ";" + "幸运值：" + Lck + ";" + "恢复速率/s：" + Restore;
     }
 
-    private void OnEnable()
+    public void InitData()
     {
-        //playerSO = new Player_SO(template_SO.hp, template_SO.currentHp, template_SO.mp, template_SO.currentMp,
-        //    template_SO.atk, template_SO.def, template_SO.spe, template_SO.lck, template_SO.restore, template_SO.money);
-        playerSO = ScriptableObject.CreateInstance<Player_SO>();
+        if (playerSO == null)
+        {
+            return;
+        }
         playerSO.hp = template_SO.hp;
         playerSO.currentHp = template_SO.currentHp;
         playerSO.mp = template_SO.mp;
