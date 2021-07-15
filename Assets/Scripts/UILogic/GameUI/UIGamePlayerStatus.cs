@@ -19,11 +19,11 @@ public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
         SetMax();
     }
 
-
     protected override void OnShow()
     {
         base.OnShow();
     }
+
 
     protected override void OnUpdate()
     {

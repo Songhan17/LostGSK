@@ -55,6 +55,7 @@ public class StageController : MonoSingleton<StageController>
 
     public Stage GetCurrentStage()
     {
+        Debug.Log(CurrentScenes.Count);
         foreach (Stage item in CurrentScenes.Values.ToList())
         {
             if (confiner.m_BoundingShape2D == item.mapCollider)

@@ -60,7 +60,6 @@ public class PlayerController : MonoSingleton<PlayerController>
             , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(10);
         GameObjectPoolManager.Instance.Register("Red", Resources.Load<GameObject>("Prefabs/SkillType/Red")
             , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(3);
-        UIGamePlayerStatus.Instance.Show();
     }
 
 

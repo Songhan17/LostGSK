@@ -8,6 +8,7 @@ public class ScenesManager : MonoSingleton<ScenesManager>
 
     private void Start()
     {
+        currentStage?.Clear();
         currentStage.Add("Stage1-1");
         currentStage.Add("Stage1-2");
         StageController.Instance.LoadStage(currentStage);

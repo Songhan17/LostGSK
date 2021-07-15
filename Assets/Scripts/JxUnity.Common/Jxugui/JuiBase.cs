@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEngine;
 
 
-public abstract class JuiBase
+public abstract class JuiBase : IDisposable
 {
     private GameObject _gameObject;
     private Transform _transform;
@@ -13,10 +13,8 @@ public abstract class JuiBase
 
     private JuiPanelAttribute attribute = null;
 
-    public bool IsFocus
-    {
-        get
-        {
+    public bool IsFocus {
+        get {
             return JuiManager.Instance.GetFocus() == this.GetType();
         }
     }
@@ -140,8 +138,8 @@ public abstract class JuiBase
             this.OnShow();
         }
     }
-    
-    public void Destroy()
+
+    private void Destroy()
     {
         this.OnDestroy();
 
@@ -274,4 +272,9 @@ public abstract class JuiBase
     protected virtual void OnHide() { }
     protected virtual void OnUpdate() { }
     protected virtual void OnDestroy() { }
+
+    public virtual void Dispose()
+    {
+        this.Destroy();
+    }
 }

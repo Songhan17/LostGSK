@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayerData_SO
   m_EditorClassIdentifier: 
   hp: 100
-  currentHp: 0
+  currentHp: 100
   mp: 1000
-  currentMp: 443
+  currentMp: 448
   atk: 5
   def: 0
   spe: 5

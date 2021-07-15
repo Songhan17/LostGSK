@@ -20,6 +20,7 @@ public class StateManager : MonoSingleton<StateManager>
             case GameState.Running:
                 InvokeRepeating("Restore", 1, 1);
                 Time.timeScale = 1;
+
                 break;
             case GameState.Menu:
                 CancelInvoke("Restore");
