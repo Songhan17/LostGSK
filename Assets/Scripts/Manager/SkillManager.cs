@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class SkillManager : MonoSingleton<SkillManager>
+public class SkillManager : Singleton<SkillManager>
 {
 
     /// <summary>
@@ -11,10 +11,6 @@ public class SkillManager : MonoSingleton<SkillManager>
     /// </summary>
     private Dictionary<int, Skill> skillDict;
 
-    void Awake()
-    {
-        ParseSkillJson();
-    }
 
     /// <summary>
     /// 解析技能信息

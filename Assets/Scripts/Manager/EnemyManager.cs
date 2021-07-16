@@ -3,18 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoSingleton<EnemyManager>
+public class EnemyManager : Singleton<EnemyManager>
 {
     /// <summary>
     ///  敌人信息的列表（集合）
     /// </summary>
     private List<Enemy> enemyList;
-
-    void Awake()
-    {
-        ParseEnemyJson();
-
-    }
 
     // 解析敌人类信息
     public void ParseEnemyJson()

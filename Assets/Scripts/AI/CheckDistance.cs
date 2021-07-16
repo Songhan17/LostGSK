@@ -11,6 +11,11 @@ public class CheckDistance : Conditional
     public SharedFloat Distance;
     public SharedTransform Target;
 
+    public override void OnStart()
+    {
+        Target.Value = PlayerController.Instance.transform;
+    }
+
     public override TaskStatus OnUpdate()
     {
         if (Vector2.Distance(transform.position, Target.Value.position) <= Distance.Value)
@@ -35,6 +40,10 @@ public class CheckView : Conditional
     public SharedFloat UnTime;
     public SharedBool AtkStatus;
 
+    public override void OnStart()
+    {
+        Target.Value = PlayerController.Instance.transform;
+    }
     public override TaskStatus OnUpdate()
     {
         float tempAngle = Vector2.Angle(transform.position - Target.Value.position,
@@ -91,7 +100,10 @@ public class CheckOnLine : Conditional
     public SharedTransform Target;
     public SharedBool RayHitPlayer;//是否检测到目标
 
-
+    public override void OnStart()
+    {
+        Target.Value = PlayerController.Instance.transform;
+    }
     public override TaskStatus OnUpdate()
     {
         if (RayHitPlayer.Value)//如果检测到目标就看向目标
@@ -141,6 +153,7 @@ public class MoveToTarget : Action
     public SharedVector2 bottomOffset;
     public SharedFloat collisionRadius;
     public LayerMask groundLayer;
+    public bool isPlayer;
 
     private Rigidbody2D rd;
     private bool onGround;
@@ -149,6 +162,10 @@ public class MoveToTarget : Action
     {
         base.OnStart();
         rd = transform.GetComponent<Rigidbody2D>();
+        if (!isPlayer)
+        {
+            Target.Value = PlayerController.Instance.transform;
+        }
     }
 
     public override TaskStatus OnUpdate()
@@ -209,7 +226,10 @@ public class MoveToTarget : Action
 public class LookAtTarget : Action
 {
     public SharedTransform Target;
-
+    public override void OnStart()
+    {
+        Target.Value = PlayerController.Instance.transform;
+    }
     public override TaskStatus OnUpdate()
     {
         transform.localScale = new Vector2(transform.position.x > Target.Value.position.x ? 1 : -1, 1);
