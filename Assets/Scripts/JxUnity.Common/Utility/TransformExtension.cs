@@ -172,11 +172,11 @@ public static class TransformExtension
     }
 
     /// <summary>
-    /// 查找子物体，不包括孙物体，隐藏的子物体
+    /// 查找一级激活子物体
     /// </summary>
     /// <param name="_this"></param>
     /// <returns></returns>
-    public static int GetChildActive(this Transform _this)
+    public static int FindChildActiveInHierarchy(this Transform _this)
     {
         int count = 0;
         for (int i = 0; i < _this.childCount; i++)

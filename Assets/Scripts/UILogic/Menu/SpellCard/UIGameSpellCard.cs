@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "MenuPanel/SpellCard/Card",EnableUpdate =true)]
-public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
-{
 
+public class UIGameSpellCard : JuiSubBase
+{
     private Transform Red;
     private Transform Blue;
     private Transform Yellow;
@@ -26,21 +25,23 @@ public class UIGameSpellCard : JuiSingletonExtension<UIGameSpellCard>
             transform.GetChild(i).GetComponentInChildren<Text>().text = string.Empty;
         }
 
+        var UIGameSpellCardList = UIGameMenu.Instance.UIGameSpellCardList;
+
         Red.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Red, Red, GetCurrentName(Red));
+            UIGameSpellCardList.Refresh(Skill.SkillType.Red, Red, GetCurrentName(Red));
         });
         Blue.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Blue, Blue, GetCurrentName(Blue));
+            UIGameSpellCardList.Refresh(Skill.SkillType.Blue, Blue, GetCurrentName(Blue));
         });
         Yellow.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.Yellow, Yellow, GetCurrentName(Yellow));
+            UIGameSpellCardList.Refresh(Skill.SkillType.Yellow, Yellow, GetCurrentName(Yellow));
         });
         White.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCardList.Instance.Refresh(Skill.SkillType.White, White, GetCurrentName(White));
+            UIGameSpellCardList.Refresh(Skill.SkillType.White, White, GetCurrentName(White));
         });
     }
 

@@ -6,28 +6,94 @@ using UnityEngine;
 /// <summary>
 /// 使每个UI成为单例，通过绑定或添加，UIManager负责更新UI
 /// </summary>
-public sealed class JuiManager : MonoSingleton<JuiManager>
+public sealed class JuiManager : MonoBehaviour, IDisposable
 {
-    public event Action UpdateHandler;
-    private List<Type> uiShowStack;
-    private Dictionary<string, JuiBase> ui;
+    [SerializeField]
+    private bool IsDontDestroyOnInit = true;
+    private static JuiManager mInstance = null;
+
+    public static JuiManager Instance
+    {
+        get
+        {
+            if (mInstance == null)
+            {
+                mInstance = GameObject.FindObjectOfType(typeof(JuiManager)) as JuiManager;
+                if (mInstance == null)
+                {
+                    Debug.LogError("juimanager instance not found.");
+                    return null;
+                }
+                if (mInstance.IsDontDestroyOnInit)
+                {
+                    DontDestroyOnLoad(mInstance.gameObject);
+                }
+            }
+            return mInstance;
+        }
+    }
+    public static bool HasInstance
+    {
+        get => mInstance != null;
+    }
+
+    private event Action UpdateHandler;
+    private struct UpdateQueueData
+    {
+        public Action Func;
+        public bool IsAdd;
+
+        public UpdateQueueData(Action func, bool isAdd)
+        {
+            this.Func = func;
+            this.IsAdd = isAdd;
+        }
+    }
+    private List<UpdateQueueData> updateOperateQueue;
+
+    private List<JuiBaseAbstract> uiShowStack;
+    private Dictionary<string, JuiBaseAbstract> ui;
 
     private static Dictionary<string, UIInfo> uiTypes;
     private class UIInfo
     {
+        public string TypeName;
+        public string UIName;
         public Type UIType;
-        public string UIPath;
         public JuiPanelAttribute Attr;
-    }
-    private void AutoBind(UIInfo uiInfo)
-    {
-        if (uiInfo.Attr.IsPreBind && Instance.transform.Find(uiInfo.UIPath) != null)
+        public override string ToString()
         {
-            Type genericType = typeof(JuiSingleton<>).MakeGenericType(new Type[] { uiInfo.UIType });
-            var method = genericType.GetMethod("GetInstance", BindingFlags.Public | BindingFlags.Static);
-            method.Invoke(null, null);
+            return TypeName;
         }
     }
+
+
+    public void AddUpdateHandler(Action action)
+    {
+        this.updateOperateQueue.Add(new UpdateQueueData(action, true));
+    }
+    public void RemoveUpdateHandler(Action action)
+    {
+        this.updateOperateQueue.Add(new UpdateQueueData(action, false));
+    }
+
+
+    private void AutoBind(UIInfo uiInfo)
+    {
+        bool hasRealUI = Instance.transform.Find(uiInfo.TypeName) != null;
+        if (hasRealUI)
+        {
+            this.RegisterUI(uiInfo.TypeName);
+            if (uiInfo.Attr.IsPreBind)
+            {
+                Type genericType = typeof(JuiBase<>).MakeGenericType(new Type[] { uiInfo.UIType });
+                var method = genericType.GetMethod("GetInstance", BindingFlags.Public | BindingFlags.Static);
+                //auto SetUI
+                method.Invoke(null, null);
+            }
+        }
+    }
+
     private void Awake()
     {
         if (HasInstance)
@@ -35,6 +101,7 @@ public sealed class JuiManager : MonoSingleton<JuiManager>
             //move
             if (transform.childCount > 0)
             {
+                //create temp
                 foreach (var item in uiTypes)
                 {
                     string uiName = item.Key;
@@ -44,7 +111,8 @@ public sealed class JuiManager : MonoSingleton<JuiManager>
                         continue;
                     }
                     //move
-                    Transform t = transform.Find(uiInfo.UIPath);
+                    Transform t = transform.Find(uiInfo.TypeName);
+
                     if (t != null)
                     {
                         t.SetParent(Instance.transform);
@@ -56,23 +124,29 @@ public sealed class JuiManager : MonoSingleton<JuiManager>
             return;
         }
 
-        this.uiShowStack = new List<Type>();
-        this.ui = new Dictionary<string, JuiBase>();
+        this.uiShowStack = new List<JuiBaseAbstract>();
+        this.ui = new Dictionary<string, JuiBaseAbstract>();
+        this.updateOperateQueue = new List<UpdateQueueData>();
 
         if (uiTypes == null)
         {
             uiTypes = new Dictionary<string, UIInfo>();
-            foreach (var item in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (item.IsDefined(typeof(JuiPanelAttribute)))
+                if (type.IsDefined(typeof(JuiPanelAttribute)))
                 {
-                    var attr = item.GetCustomAttribute<JuiPanelAttribute>();
-                    string uiPath = attr.UiPath;
-                    if (uiPath == null)
+                    var attr = type.GetCustomAttribute<JuiPanelAttribute>();
+                    if (attr.Name == null)
                     {
-                        uiPath = item.Name;
+                        attr.Name = type.Name;
                     }
-                    uiTypes.Add(item.Name, new UIInfo() { UIType = item, UIPath = uiPath, Attr = attr });
+                    uiTypes.Add(type.Name, new UIInfo()
+                    {
+                        TypeName = type.Name,
+                        UIName = attr.Name,
+                        UIType = type,
+                        Attr = attr
+                    });
                 }
             }
         }
@@ -83,26 +157,59 @@ public sealed class JuiManager : MonoSingleton<JuiManager>
             this.AutoBind(item.Value);
         }
     }
-
+    public static JuiPanelAttribute GetUIAttribute(JuiBaseAbstract t)
+    {
+        var type = t.GetType();
+        var name = type.Name;
+        if (!uiTypes.ContainsKey(name))
+        {
+            return null;
+        }
+        return uiTypes[name].Attr;
+    }
     private void Update()
     {
         this.UpdateHandler?.Invoke();
+        if (this.updateOperateQueue.Count > 0)
+        {
+            foreach (var item in this.updateOperateQueue)
+            {
+                if (item.IsAdd)
+                {
+                    this.UpdateHandler += item.Func;
+                }
+                else
+                {
+                    this.UpdateHandler -= item.Func;
+                }
+            }
+            this.updateOperateQueue.Clear();
+        }
     }
 
-    public void Push(Type type)
+    public void Push(JuiBaseAbstract obj)
     {
-        this.uiShowStack.Add(type);
+        this.GetFocus()?.OnLostFocus();
+        this.uiShowStack.Add(obj);
+        obj.OnFocus();
     }
-    public void Pop(Type type)
+    public void Pop(JuiBaseAbstract obj)
     {
-        this.uiShowStack.Remove(type);
+        if (obj != this.GetFocus())
+        {
+            this.uiShowStack.Remove(obj);
+            return;
+        }
+        obj.OnLostFocus();
+        this.uiShowStack.Remove(obj);
+        this.GetFocus()?.OnFocus();
     }
 
     /// <summary>
     /// 获取Focus
     /// </summary>
     /// <returns></returns>
-    public Type GetFocus()
+    public JuiBaseAbstract GetFocus()
     {
         if (this.uiShowStack.Count == 0)
         {
@@ -114,30 +221,54 @@ public sealed class JuiManager : MonoSingleton<JuiManager>
     /// 设置为Focus
     /// </summary>
     /// <param name="type"></param>
-    public void SetFocus(Type type)
+    public void SetFocus(JuiBaseAbstract obj)
     {
-        this.uiShowStack.Remove(type);
-        this.uiShowStack.Add(type);
+        if (obj == this.GetFocus())
+        {
+            return;
+        }
+        this.uiShowStack.Remove(obj);
+        this.GetFocus()?.OnLostFocus();
+        this.uiShowStack.Add(obj);
+        obj.OnFocus();
     }
 
-    public void AddUI(JuiBase ui)
+    public void RegisterUI(string name)
     {
-        this.ui.Add(ui.GetType().Name, ui);
+        this.ui.Add(name, null);
     }
-    public JuiBase GetUI(string name)
+    public void SetUI(string name, JuiBaseAbstract ui)
+    {
+        this.ui[name] = ui;
+    }
+    public JuiAbstract GetUI(string name)
     {
         return this.ui[name];
+    }
+    public string[] GetAllUI()
+    {
+        string[] uis = new string[this.ui.Count];
+        this.ui.Keys.CopyTo(uis, 0);
+        return uis;
     }
     public bool Exist(string ui)
     {
         return this.ui.ContainsKey(ui);
     }
-    public GameObject LoadResource(string path)
+    public bool HasUIInstance(string ui)
     {
-        throw new System.NotImplementedException();
+        JuiBaseAbstract uiinst = null;
+        this.ui.TryGetValue(ui, out uiinst);
+        return uiinst != null;
     }
 
-    public override void Dispose()
+    public GameObject LoadResource(string path)
+    {
+        throw new System.NotImplementedException(path);
+    }
+
+    private bool isDisposed = false;
+    public void Dispose()
     {
         if (isDisposed)
         {
@@ -154,7 +285,5 @@ public sealed class JuiManager : MonoSingleton<JuiManager>
             }
             this.ui?.Clear();
         }
-
-        base.Dispose();
     }
 }

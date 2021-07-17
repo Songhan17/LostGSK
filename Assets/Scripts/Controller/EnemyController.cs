@@ -10,7 +10,7 @@ public class EnemyController : EnemyBase
     protected override void Start()
     {
         base.Start();
-        UIGameEnemy.Instance.Show();
+        UIGameUI.Instance.UIGameEnemy.Show();
         status = Status.idle;
         GameObjectPoolManager.Instance.Register("Stg_01", Resources.Load<GameObject>("Prefabs/Stg_01")
             , go => go.SetActive(true), go => go.SetActive(false)).PreLoad(5);
@@ -21,7 +21,7 @@ public class EnemyController : EnemyBase
     protected override void Update()
     {
         base.Update();
-        UIGameEnemy.Instance.Refresh(enemy);
+        UIGameUI.Instance.UIGameEnemy.Refresh(enemy);
         ChangeStatus();
         if (enemy.Hp == 1000)
         {

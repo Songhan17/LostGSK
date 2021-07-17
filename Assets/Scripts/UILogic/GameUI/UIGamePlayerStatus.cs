@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "UI/Status",EnableUpdate =true,IsPreBind =true)]
-public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
+
+public class UIGamePlayerStatus : JuiSubBase
 {
-    private Slider red,blue;
-    private Text redText,blueText;
+    [JuiElement("Hp/red")]
+    private Slider red = default;
+    [JuiElement("Hp/hp")]
+    private Text redText = default;
+
+    [JuiElement("Mp/blue")]
+    private Slider blue = default;
+    [JuiElement("Mp/mp")]
+    private Text blueText = default;
 
     protected override void OnCreate()
     {
         base.OnCreate();
-        red = transform.Find("Hp/red").GetComponent<Slider>();
-        redText = transform.Find("Hp/hp").GetComponent<Text>();
-        blue = transform.Find("Mp/blue").GetComponent<Slider>();
-        blueText = transform.Find("Mp/mp").GetComponent<Text>();
         SetMax();
     }
 
@@ -40,5 +43,5 @@ public class UIGamePlayerStatus : JuiSingletonExtension<UIGamePlayerStatus>
         blue.maxValue = DataManager.Instance.Mp;
     }
 
-    
+
 }

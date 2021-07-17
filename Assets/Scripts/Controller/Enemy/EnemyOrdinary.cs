@@ -9,7 +9,8 @@ public class EnemyOrdinary : EnemyBase
     protected override void Update()
     {
         base.Update();
-        UIGameEnemy.Instance.Refresh(enemy);
+
+        UIGameUI.Instance.UIGameEnemy.Refresh(enemy);
         if (coolTime > 0)
         {
             coolTime -= Time.deltaTime;

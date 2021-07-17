@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "MenuPanel/PlayerPanel/property",EnableUpdate =true)]
-public class UIPlayerPanelProperty : JuiSingletonExtension<UIPlayerPanelProperty>
+public class UIPlayerPanelProperty : JuiSubBase
 {
 
     protected override void OnCreate()

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "UI/EnemyHp")]
-public class UIGameEnemy : JuiSingletonExtension<UIGameEnemy>
+
+public class UIGameEnemy : JuiSubBase
 {
     private Text text;
 

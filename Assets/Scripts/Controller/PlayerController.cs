@@ -179,7 +179,7 @@ public class PlayerController : MonoSingleton<PlayerController>
             {
                 return;
             }
-            if (DataManager.Instance.CurrentMp< DataManager.Instance.RedSkill.Consume)
+            if (DataManager.Instance.CurrentMp < DataManager.Instance.RedSkill.Consume)
             {
                 return;
             }
@@ -192,7 +192,7 @@ public class PlayerController : MonoSingleton<PlayerController>
         if (isConsume)
         {
             DataManager.Instance.CurrentMp -= 1;
-            if (DataManager.Instance.CurrentMp<= targetMp)
+            if (DataManager.Instance.CurrentMp <= targetMp)
             {
                 DataManager.Instance.CurrentMp = targetMp;
                 isConsume = false;
@@ -385,7 +385,7 @@ public class PlayerController : MonoSingleton<PlayerController>
     private void ShowGameOver()
     {
         StateManager.Instance.SetState(GameState.Stop);
-        UIDialogGame.Instance.Show();
+        UIDialog.Instance.UIDialogGame.Show();
     }
 
     public void ReLoad()
@@ -425,7 +425,7 @@ public class PlayerController : MonoSingleton<PlayerController>
 
     private void OnTriggerStay2D(Collider2D target)
     {
-        if (target.gameObject.layer == 9&& !coll.onGround)
+        if (target.gameObject.layer == 9 && !coll.onGround)
         {
             isIdle = false;
         }
