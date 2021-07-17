@@ -7,7 +7,7 @@ public class ScenesManager : MonoSingleton<ScenesManager>
 {
     private List<string> currentStage = new List<string>();
 
-    IEnumerator Start()
+    void Start()
     {
         currentStage?.Clear();
         currentStage.Add("Stage1-1");
@@ -18,21 +18,31 @@ public class ScenesManager : MonoSingleton<ScenesManager>
         {
             DontDestroyOnLoad(rootObj);
         }
-        yield return new WaitForSeconds(1);
         GameManager.Instance.LoadMain();
     }
 
     public void LoadCurrent()
     {
-        Invoke("Load", 2);
+        StartCoroutine(Load());
 
     }
 
-    public void Load()
+    IEnumerator Load()
     {
-        Debug.Log("Start");
-        Debug.Log(GameObject.Find("__System").name);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+        operation.allowSceneActivation = false;
+
+        while (!operation.isDone)
+        {
+            if (operation.progress >= 0.9f)
+            {
+                operation.allowSceneActivation = true;
+
+                yield return null;
+            }
+        }
         PlayerController.Instance.transform.position = GameObject.Find("Position").transform.GetChild(0).position;
+        DataManager.Instance.InitData();
         StageController.Instance.LoadStage(currentStage);
     }
 

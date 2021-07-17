@@ -388,6 +388,13 @@ public class PlayerController : MonoSingleton<PlayerController>
         UIDialogGame.Instance.Show();
     }
 
+    public void ReLoad()
+    {
+        animator.Play("idle");
+        StateManager.Instance.SetState(GameState.Running);
+        this.enabled = true;
+    }
+
     public void HitPlayer(int damage)
     {
         if (invincibleTimer <= 0)

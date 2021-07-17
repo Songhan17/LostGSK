@@ -51,7 +51,6 @@ public class StageController : MonoSingleton<StageController>
             }
             CurrentScenes.Add(e, stages);
         });
-        
         confiner.m_BoundingShape2D = CurrentScenes[stage[0]].mapCollider;
     }
 

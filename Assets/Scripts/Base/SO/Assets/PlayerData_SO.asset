@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   currentHp: 100
-  mp: 1000
-  currentMp: 448
+  mp: 30
+  currentMp: 30
   atk: 5
   def: 0
   spe: 5

@@ -70,6 +70,7 @@ public class DataManager : MonoSingleton<DataManager>
         playerSO.lck = template_SO.lck;
         playerSO.restore = template_SO.restore;
         playerSO.money = template_SO.money;
+        PlayerController.Instance.ReLoad();
     }
 
 }

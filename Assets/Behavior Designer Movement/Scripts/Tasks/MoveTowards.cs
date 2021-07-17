@@ -29,6 +29,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 Debug.LogError("Error: A MoveTowards target value is not set.");
                 targetPosition = new SharedVector3(); // create a new SharedVector3 to prevent repeated errors
             }
+            if (lookAtTarget.Value)
+            {
+                targetLook = PlayerController.Instance.transform;
+            }
         }
 
         public override TaskStatus OnUpdate()

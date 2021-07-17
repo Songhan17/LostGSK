@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -18,15 +17,19 @@ public class GameManager : MonoSingleton<GameManager>
 
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            LoadMain();
+        }
+    }
 
     public void LoadMain()
     {
-        GameObjectPoolManager.Instance.DeleteAll();
-        StateManager.Instance.SetState(GameState.Stop);
-        SceneManager.LoadScene(2);
-        StateManager.Instance.SetState(GameState.Running);
+        GameObjectPoolManager.Instance.Delete("Stg_01");
+        GameObjectPoolManager.Instance.Delete("Shoot_1");
         ScenesManager.Instance.LoadCurrent();
-
     }
 
 }

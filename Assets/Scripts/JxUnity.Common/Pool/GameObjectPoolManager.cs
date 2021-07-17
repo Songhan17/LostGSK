@@ -214,8 +214,11 @@ public sealed class GameObjectPoolManager : MonoSingleton<GameObjectPoolManager>
 
     public void Delete(string type)
     {
-        this.pools[type].Dispose();
-        this.pools.Remove(type);
+        if (this.pools.ContainsKey(type))
+        {
+            this.pools[type].Dispose();
+            this.pools.Remove(type);
+        }
     }
 
     public void DeleteAll()

@@ -82,4 +82,13 @@ public class EnemyBase : MonoBehaviour
             invincibleTimer = 0.5f;
         }
     }
+
+    protected virtual void OnTriggerStay2D(Collider2D target)
+    {
+        if (target.CompareTag("Player"))
+        {
+            PlayerController.Instance.HitPlayer(enemy.Damage);
+        }
+    }
+
 }

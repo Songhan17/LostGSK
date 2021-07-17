@@ -12,6 +12,7 @@ public class UIDialogGame : JuiSingletonExtension<UIDialogGame>
         {
             if (Input.GetKeyDown(KeyCode.X))
             {
+                Hide();
                 GameManager.Instance.LoadMain();
             }
         }

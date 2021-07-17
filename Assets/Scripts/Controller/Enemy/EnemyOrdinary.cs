@@ -26,14 +26,4 @@ public class EnemyOrdinary : EnemyBase
         animator.Play("atk_black");
         coolTime = 3f;
     }
-
-    private void OnTriggerStay2D(Collider2D target)
-    {
-        if (target.CompareTag("Player"))
-        {
-            PlayerController.Instance.HitPlayer(enemy.Damage);
-        }
-    }
-
-
 }
