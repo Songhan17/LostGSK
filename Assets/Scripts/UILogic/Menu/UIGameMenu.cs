@@ -4,15 +4,25 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "MenuPanel",EnableUpdate =true)]
-public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
+[JuiPanel(Name = "MenuPanel", EnableUpdate = true, IsPreBind = true)]
+public class UIGameMenu : JuiBase<UIGameMenu>
 {
 
     public Transform PlayerPanel { get; private set; }
     public Transform SpellCard { get; private set; }
     public Transform Title { get; private set; }
 
+    [JuiElementSubPanel(Path = "PlayerPanel/property", EnableUpdate = true)]
+    private UIPlayerPanelProperty property = default;
+    public UIPlayerPanelProperty UIPlayerPanelProperty { get => property; }
 
+    [JuiElementSubPanel(Path = "SpellCard/Card", EnableUpdate = true)]
+    private UIGameSpellCard Card = default;
+    public UIGameSpellCard UIGameSpellCard { get => Card; }
+
+    [JuiElementSubPanel(Path = "SpellCard/CardList", EnableUpdate = true)]
+    private UIGameSpellCardList CardList = default;
+    public UIGameSpellCardList UIGameSpellCardList { get => CardList; }
 
     protected override void OnCreate()
     {
@@ -24,12 +34,12 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
 
         PlayerPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIPlayerPanelProperty.Instance.Switch();
+            property.Switch();
         });
 
         SpellCard.GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIGameSpellCard.Instance.Show();
+            Card.Show();
         });
 
         Title.GetComponent<Button>().onClick.AddListener(() =>

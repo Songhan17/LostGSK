@@ -8,8 +8,10 @@ public class MonoSingleton<T> : MonoBehaviour, IDisposable where T : MonoSinglet
 
     private static T mInstance = null;
 
-    public static T Instance {
-        get {
+    public static T Instance
+    {
+        get
+        {
             if (mInstance == null)
             {
                 mInstance = GameObject.FindObjectOfType(typeof(T)) as T;
@@ -30,13 +32,17 @@ public class MonoSingleton<T> : MonoBehaviour, IDisposable where T : MonoSinglet
                 }
                 if (mInstance.IsDontDestroyOnInit)
                 {
-                    DontDestroyOnLoad(mInstance.gameObject);
+                    if (object.ReferenceEquals(mInstance.transform.parent, null))
+                    {
+                        DontDestroyOnLoad(mInstance.gameObject);
+                    }
                 }
             }
             return mInstance;
         }
     }
-    public static bool HasInstance {
+    public static bool HasInstance
+    {
         get => mInstance != null;
     }
     public static T GetInstance()

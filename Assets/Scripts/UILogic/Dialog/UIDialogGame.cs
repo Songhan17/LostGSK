@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[JuiPanel(UiPath = "Dialog/GameMsg", EnableUpdate = true, IsPreBind = false)]
-public class UIDialogGame : JuiSingletonExtension<UIDialogGame>
+
+public class UIDialogGame : JuiSubBase
 {
     protected override void OnUpdate()
     {

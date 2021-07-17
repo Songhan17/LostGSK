@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[JuiPanel(UiPath = "Dialog/SkillMsg", EnableUpdate = true, IsPreBind = false)]
-public class UIDialogSkill : JuiSingletonExtension<UIDialogSkill>
+public class UIDialogSkill : JuiSubBase
 {
     private Text text;
 

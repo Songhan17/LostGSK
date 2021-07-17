@@ -24,8 +24,8 @@ public class SkillType : MonoBehaviour
             if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) <= 0.2f)
             {
                 GameObjectPoolManager.Instance.Recycle(gameObject);
-                UIDialogSkill.Instance.Refresh(skill);
-                UIDialogSkill.Instance.Show();
+                UIDialog.Instance.UIDialogSkill.Refresh(skill);
+                UIDialog.Instance.UIDialogSkill.Show();
             }
         }
     }
