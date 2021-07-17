@@ -12,17 +12,17 @@ public class UIGameMenu : JuiBase<UIGameMenu>
     public Transform SpellCard { get; private set; }
     public Transform Title { get; private set; }
 
-    [JuiElementSubPanel(Path = "MenuPanel/PlayerPanel/property", EnableUpdate = true)]
-    private UIPlayerPanelProperty PlayerPanelProperty = default;
-    public UIPlayerPanelProperty UIPlayerPanelProperty { get => PlayerPanelProperty; }
+    [JuiElementSubPanel(Path = "PlayerPanel/property", EnableUpdate = true)]
+    private UIPlayerPanelProperty property = default;
+    public UIPlayerPanelProperty UIPlayerPanelProperty { get => property; }
 
-    [JuiElementSubPanel(Path = "MenuPanel/SpellCard/Card", EnableUpdate = true)]
-    private UIGameSpellCard GameSpellCard = default;
-    public UIGameSpellCard UIGameSpellCard { get => GameSpellCard; }
+    [JuiElementSubPanel(Path = "SpellCard/Card", EnableUpdate = true)]
+    private UIGameSpellCard Card = default;
+    public UIGameSpellCard UIGameSpellCard { get => Card; }
 
-    [JuiElementSubPanel(Path = "MenuPanel/SpellCard/CardList", EnableUpdate = true)]
-    private UIGameSpellCardList GameSpellCardList = default;
-    public UIGameSpellCardList UIGameSpellCardList { get => GameSpellCardList; }
+    [JuiElementSubPanel(Path = "SpellCard/CardList", EnableUpdate = true)]
+    private UIGameSpellCardList CardList = default;
+    public UIGameSpellCardList UIGameSpellCardList { get => CardList; }
 
     protected override void OnCreate()
     {
@@ -34,12 +34,12 @@ public class UIGameMenu : JuiBase<UIGameMenu>
 
         PlayerPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
-            PlayerPanelProperty.Switch();
+            property.Switch();
         });
 
         SpellCard.GetComponent<Button>().onClick.AddListener(() =>
         {
-            GameSpellCard.Show();
+            Card.Show();
         });
 
         Title.GetComponent<Button>().onClick.AddListener(() =>

@@ -13,7 +13,7 @@ public class UIGameUI : JuiBase<UIGameUI>
     public UIGameEnemy UIGameEnemy { get => EnemyHp; }
 
     [JuiElementSubPanel(EnableUpdate = true)]
-    private UIGamePlayerStatus Status;
+    private UIGamePlayerStatus Status = default;
     public UIGamePlayerStatus UIGamePlayerStatus { get => Status; }
 
 }
