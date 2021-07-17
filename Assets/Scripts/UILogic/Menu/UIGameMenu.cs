@@ -10,6 +10,7 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
 
     public Transform PlayerPanel { get; private set; }
     public Transform SpellCard { get; private set; }
+    public Transform Title { get; private set; }
 
 
 
@@ -19,6 +20,7 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
 
         PlayerPanel = transform.Find("PlayerPanel");
         SpellCard = transform.Find("SpellCard");
+        Title = transform.Find("Title");
 
         PlayerPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -28,6 +30,11 @@ public class UIGameMenu : JuiSingletonExtension<UIGameMenu>
         SpellCard.GetComponent<Button>().onClick.AddListener(() =>
         {
             UIGameSpellCard.Instance.Show();
+        });
+
+        Title.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            ScenesManager.Instance.Menu();
         });
     }
 

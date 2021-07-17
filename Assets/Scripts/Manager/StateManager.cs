@@ -6,6 +6,8 @@ public class StateManager : MonoSingleton<StateManager>
 {
     protected GameState state;
 
+    private bool isRestore;
+
     public GameState GetState()
     {
         return state;
@@ -18,9 +20,13 @@ public class StateManager : MonoSingleton<StateManager>
         switch (this.state)
         {
             case GameState.Running:
-                InvokeRepeating("Restore", 1, 1);
                 Time.timeScale = 1;
-
+                if (isRestore)
+                {
+                    return;
+                }
+                InvokeRepeating("Restore", 1, 1);
+                isRestore = true;
                 break;
             case GameState.Menu:
                 CancelInvoke("Restore");
@@ -46,6 +52,7 @@ public class StateManager : MonoSingleton<StateManager>
 
     public void Restore()
     {
+        
         DataManager.Instance.CurrentMp += (int)DataManager.Instance.Restore;
     }
 

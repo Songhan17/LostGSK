@@ -7,8 +7,22 @@ public class ScenesManager : MonoSingleton<ScenesManager>
 {
     private List<string> currentStage = new List<string>();
 
-    void Start()
+
+    public void InitScene()
     {
+        SceneManager.LoadScene(0);
+        StartCoroutine(Init());
+    }
+
+    public void Menu()
+    {
+        
+        SceneManager.LoadScene(2);
+    }
+
+    IEnumerator Init()
+    {
+        yield return new WaitForSeconds(1);
         currentStage?.Clear();
         currentStage.Add("Stage1-1");
         currentStage.Add("Stage1-2");
@@ -16,7 +30,10 @@ public class ScenesManager : MonoSingleton<ScenesManager>
 
         foreach (GameObject rootObj in SceneManager.GetActiveScene().GetRootGameObjects())
         {
-            DontDestroyOnLoad(rootObj);
+            if (rootObj.name != "Main Camera" && rootObj.name != "Loading")
+            {
+                DontDestroyOnLoad(rootObj);
+            }
         }
         GameManager.Instance.LoadMain();
     }
@@ -24,7 +41,6 @@ public class ScenesManager : MonoSingleton<ScenesManager>
     public void LoadCurrent()
     {
         StartCoroutine(Load());
-
     }
 
     IEnumerator Load()
@@ -44,6 +60,7 @@ public class ScenesManager : MonoSingleton<ScenesManager>
         PlayerController.Instance.transform.position = GameObject.Find("Position").transform.GetChild(0).position;
         DataManager.Instance.InitData();
         StageController.Instance.LoadStage(currentStage);
+        StateManager.Instance.SetState(GameState.Running);
     }
 
 }
